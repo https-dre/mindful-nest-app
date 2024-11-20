@@ -3,7 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
-import { Home } from "./screens/Home"
+import { Home } from "./screens/Home";
+import { Planner } from "./screens/Planner";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,6 +17,22 @@ export function BottomTabRouter() {
                 iconName = 'house';
             } else if (route.name === 'Comunidade') {
                 iconName = 'users'; // Altere para o ícone desejado para Comunidade
+            }
+
+            switch(route.name) {
+                case "Home":
+                    iconName = 'house'
+                    break
+                case "Comunidade":
+                    iconName = "users"
+                    break
+                case "Planner":
+                    iconName = "house"
+                    break
+                default:
+                    iconName="house"
+                    break
+                
             }
 
             // Retorna o ícone com a cor amarela se a aba estiver ativa
@@ -34,6 +51,7 @@ export function BottomTabRouter() {
             screenOptions={tabNavigatorScreenOptions}
         >
           <Tab.Screen name="Home" component={Home} />
+          <Tab.Screen name="Planner" component={Planner} />
         </Tab.Navigator>
     );
 }
