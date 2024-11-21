@@ -2,6 +2,7 @@
   "expo": {
     "name": "mindful-nest-app",
     "slug": "snack-bdd0d183-c44e-4951-89be-66256f51e13b",
+    "newArchEnabled": true,
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
