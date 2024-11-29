@@ -9,7 +9,7 @@ const usersData = [
 ]
 
 export const Project = ({navigation, name = "Project Name", progress = "50%", 
-  deadline = "01/12", backColor = "#A520F7", userNames = ["andre_dias"], }) => {
+  deadline = "01/12", backColor = "#A520F7", userNames = ["andre_dias"], w = 250, h = 170 }) => {
   let participantesImage = []
 
   for(const index in userNames) {
@@ -21,10 +21,10 @@ export const Project = ({navigation, name = "Project Name", progress = "50%",
   }
   
   return (
-    <View style={[styles.container, {backgroundColor: backColor}]}>
+    <View style={[styles.container, {backgroundColor: backColor, width: w, height: h}]}>
       <View style={{flexDirection: "row", justifyContent: "space-between", alignSelf: "center", width: "100%"}}>
         <TouchableOpacity>
-          <Text style={{fontSize: 24, color: "white"}}>{name}</Text>
+          <Text style={{fontSize: 20, color: "white"}}>{name}</Text>
         </TouchableOpacity>
         
         <Icon name="ellipsis-vertical" size={25} color="white"/>
@@ -59,11 +59,10 @@ export const Project = ({navigation, name = "Project Name", progress = "50%",
 
 const styles = StyleSheet.create({
   container: {
-    width: 300,
-    height: 150,
     borderRadius: 15,
     padding: 15,
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+    marginBottom: 10
   },
   fotoPerfil: {
     width: 30
