@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from 'expo-font';
@@ -37,4 +38,4 @@ const App = () => {
   )
 }
 
-export default App;
+export default gestureHandlerRootHOC(App);
