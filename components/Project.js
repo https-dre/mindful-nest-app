@@ -8,12 +8,13 @@ const usersData = [
   }
 ]
 
-export const Project = ({navigation, name = "Project Name", progress = "50%", deadline = "01/12", backColor = "#A520F7", userNames = ["andre_dias"]}) => {
+export const Project = ({navigation, name = "Project Name", progress = "50%", 
+  deadline = "01/12", backColor = "#A520F7", userNames = ["andre_dias"], }) => {
   let participantesImage = []
 
   for(const index in userNames) {
     usersData.map(user => {
-      if(user.name == userNames[index]) {
+      if(user.name === userNames[index]) {
         participantesImage.push(<Image source={user.perfil} style={styles.fotoPerfil} key={Math.random()} />)
       }
     })
@@ -38,7 +39,7 @@ export const Project = ({navigation, name = "Project Name", progress = "50%", de
 
         { /* Barra de Progresso */ }
         <View style={{opacity: 0.21 ,backgroundColor: "black", alignSelf: "center", height: 1, width: "100%"}}>
-          <View style={{height: 1, width: progress, backgroundColor: "white", opacity: 1}}></View>
+          <View style={{height: 1, width: progress, backgroundColor: "white", opacity: 1}}/>
         </View>
       </View>
       
@@ -58,8 +59,8 @@ export const Project = ({navigation, name = "Project Name", progress = "50%", de
 
 const styles = StyleSheet.create({
   container: {
-    width: "60%",
-    height: "60%",
+    width: 300,
+    height: 150,
     borderRadius: 15,
     padding: 15,
     justifyContent: "space-around"

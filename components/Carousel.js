@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { View, FlatList, Text, StyleSheet, Dimensions } from 'react-native';
-
 import { Project } from "./Project"
 
 const { width } = Dimensions.get('window');
@@ -32,7 +31,9 @@ const MyCarousel = () => {
                 ref={flatListRef} // Defina a referência para o FlatList
                 data={data}
                 renderItem={({ item }) => (
-                    <Project />
+                    <View style={styles.slide}>
+                        <Project />
+                    </View>
                 )}
                 horizontal
                 pagingEnabled
@@ -43,15 +44,13 @@ const MyCarousel = () => {
                 snapToAlignment="center"
                 decelerationRate="fast"
                 bounces={false} // Desativa o efeito de bounce
+                
             />
             <View style={styles.pagination}>
                 {data.map((_, index) => (
                     <View
                         key={index}
-                        style={[
-                            styles.dot,
-                            { opacity: index === currentIndex ? 1 : 0.3 },
-                        ]}
+                        style={[styles.dot, { opacity: index === currentIndex ? 1 : 0.3 }]}
                     />
                 ))}
             </View>
@@ -61,14 +60,19 @@ const MyCarousel = () => {
 
 const styles = StyleSheet.create({
     container: {
+        alignItems: 'center',
+        width: '100%',
+        maxHeight: 300
+    },
+    slide: {
+        width: width , // Definindo o tamanho do item
         justifyContent: 'center',
         alignItems: 'center',
-        width: "100%"
     },
     pagination: {
         flexDirection: 'row',
         alignSelf: 'center',
-        marginTop: 10,
+        marginTop: 10
     },
     dot: {
         height: 8,
