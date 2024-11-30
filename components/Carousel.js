@@ -4,15 +4,8 @@ import { Project } from "./Project"
 
 const { width } = Dimensions.get('window');
 
-const MyCarousel = () => {
+const MyCarousel = ({data}) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-
-    // Dados para o carousel
-    const data = [
-        { key: '1', title: 'Slide 1' },
-        { key: '2', title: 'Slide 2' },
-        { key: '3', title: 'Slide 3' },
-    ];
 
     // Referência para o FlatList
     const flatListRef = useRef(null);
@@ -30,11 +23,17 @@ const MyCarousel = () => {
             <FlatList
                 ref={flatListRef} // Defina a referência para o FlatList
                 data={data}
-                renderItem={({ item }) => (
-                    <View style={styles.slide}>
-                        <Project />
-                    </View>
-                )}
+                renderItem={({ item }) => {
+                    if(item.progress !== "100%") {
+                        return (
+                            <View style={styles.slide}>
+                                <Project 
+                                    projectData={item}
+                                />
+                            </View>
+                        )
+                    }   
+                }}
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}

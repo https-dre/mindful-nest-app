@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { projects } from "../exampledata";
 
 const usersData = [
   {
@@ -8,23 +10,28 @@ const usersData = [
   }
 ]
 
-export const Project = ({navigation, name = "Project Name", progress = "50%", 
-  deadline = "01/12", backColor = "#A520F7", userNames = ["andre_dias"], w = 250, h = 170 }) => {
+export const Project = ({projectData = projects[0], w = 250, h = 170 }) => {
   let participantesImage = []
+  const navigation = useNavigation();
 
-  for(const index in userNames) {
+  for(const index in projectData.users) {
     usersData.map(user => {
-      if(user.name === userNames[index]) {
+      if(user.name === projectData.users[index]) {
         participantesImage.push(<Image source={user.perfil} style={styles.fotoPerfil} key={Math.random()} />)
       }
     })
   }
+
+  function handleNavigation() {
+    navigation.navigate("ViewProject", {projectData})
+  }
   
   return (
-    <View style={[styles.container, {backgroundColor: backColor, width: w, height: h}]}>
+    <View style={[styles.container, {backgroundColor: projectData.backColor, width: w, height: h}]}>
       <View style={{flexDirection: "row", justifyContent: "space-between", alignSelf: "center", width: "100%"}}>
-        <TouchableOpacity>
-          <Text style={{fontSize: 20, color: "white"}}>{name}</Text>
+        <TouchableOpacity 
+        onPress={handleNavigation}>
+          <Text style={{fontSize: 20, color: "white"}}>{projectData.name}</Text>
         </TouchableOpacity>
         
         <Icon name="ellipsis-vertical" size={25} color="white"/>
@@ -34,12 +41,12 @@ export const Project = ({navigation, name = "Project Name", progress = "50%",
       <View style={{alignSelf: "center", width: "100%"}}>
         <View style={{flexDirection: "row", justifyContent: "space-between"}}>
           <Text style={{color: "#EBEBEB"}}>Progresso</Text>
-          <Text style={{color: "#EBEBEB"}}>{progress}</Text>
+          <Text style={{color: "#EBEBEB"}}>{projectData.progress}</Text>
         </View>
 
         { /* Barra de Progresso */ }
         <View style={{opacity: 0.21 ,backgroundColor: "black", alignSelf: "center", height: 1, width: "100%"}}>
-          <View style={{height: 1, width: progress, backgroundColor: "white", opacity: 1}}/>
+          <View style={{height: 1, width: projectData.progress, backgroundColor: "white", opacity: 1}}/>
         </View>
       </View>
       
@@ -48,7 +55,7 @@ export const Project = ({navigation, name = "Project Name", progress = "50%",
 
         <View style={{flexDirection: "row", alignItems: "center", gap: 5}}>
           <Icon name="calendar" color="white" size={20} />
-          <Text style={{color: "white"}}>{deadline}</Text>
+          <Text style={{color: "white"}}>{projectData.deadline}</Text>
         </View>
       </View>
       
