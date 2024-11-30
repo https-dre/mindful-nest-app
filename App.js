@@ -11,6 +11,7 @@ import { VerifyEmail } from "./screens/Login/VerifyEmail";
 import { ChoosePlan } from "./screens/Login/ChoosePlan";
 import { Login } from "./screens/Login/Login";
 import { BottomTabRouter } from "./BottomTabRouter"
+import { ViewProject } from './screens/ViewProject';
 
 const Stack = createNativeStackNavigator()
 
@@ -33,6 +34,7 @@ const App = () => {
             <Stack.Screen name="ChoosePlan" component={ChoosePlan} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="BottomTab" component={BottomTabRouter} />
+            <Stack.Screen name="ViewProject" component={ViewProject} />
           </Stack.Navigator>
       </NavigationContainer>
   )
