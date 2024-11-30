@@ -1,23 +1,23 @@
 export const tasks = [
     {
         name: "Reunião com o Cliente",
-        date: new Date(),
-        status: "Terminada",
+        date: new Date().toISOString(),
+        status: 0,
     },
     {
         name: "Hospedagem",
-        date: new Date(),
-        status: "Em Andamento",
+        date: new Date(2024, 11, 30, 10, 0, 0).toISOString(),
+        status: 1,
     },
     {
         name: "Definição de Arquitetura",
-        date: new Date(),
-        status: "Em Andamento",
+        date: new Date().toISOString(),
+        status: 2,
     },
     {
         name: "Entrega do App",
-        date: new Date(),
-        status: "Em Andamento",
+        date: new Date(2024, 11, 3, 23, 59, 0 ).toISOString(),
+        status: 1,
     }
 ]
 
