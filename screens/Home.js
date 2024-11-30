@@ -1,9 +1,10 @@
 import { KeyboardAvoidingView, TouchableWithoutFeedback, SafeAreaView, StyleSheet,
 View, Text, TextInput, Image, Platform, Keyboard, TouchableOpacity, ScrollView } from "react-native";
+
 import Icon from "react-native-vector-icons/Ionicons";
 
 import Carousel from "../components/Carousel";
-import { Project } from "../components/Project"
+import { projects } from "../exampledata";
 
 export const Home = ({navigation}) => {
   return (
@@ -57,7 +58,7 @@ export const Home = ({navigation}) => {
           </View>
 
          { /* Carousel */}
-          <Carousel />
+          <Carousel data={projects}/>
 
         </ScrollView>
       </SafeAreaView>
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    paddingTop: Platform.OS == "ios" ? 0 : 20
+    paddingTop: Platform.OS === "ios" ? 0 : 20
   },
   elipseButton: {
     borderRadius: 1000,
