@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import Icon from 'react-native-vector-icons/Octicons';
 
 import { Home } from "./screens/Home";
 import { Planner } from "./screens/Planner";
@@ -13,24 +13,24 @@ export function BottomTabRouter() {
         tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === 'Home') {
-                iconName = 'house';
-            } else if (route.name === 'Comunidade') {
-                iconName = 'users'; // Altere para o ícone desejado para Comunidade
-            }
-
             switch(route.name) {
                 case "Home":
-                    iconName = 'house'
+                    iconName = 'home'
                     break
                 case "Comunidade":
-                    iconName = "users"
+                    iconName = "people"
                     break
                 case "Planner":
-                    iconName = "house"
+                    iconName = "apps"
+                    break
+                case "Calendar":
+                    iconName = "calendar"
+                    break
+                case "Settings":
+                    iconName = "person"
                     break
                 default:
-                    iconName="house"
+                    iconName="home"
                     break
                 
             }
@@ -51,7 +51,10 @@ export function BottomTabRouter() {
             screenOptions={tabNavigatorScreenOptions}
         >
           <Tab.Screen name="Home" component={Home} />
+          <Tab.Screen name="Comunidade" component={Home} />
           <Tab.Screen name="Planner" component={Planner} />
+          <Tab.Screen name="Calendar" component={Home} />
+          <Tab.Screen name="Settings" component={Home} />
         </Tab.Navigator>
     );
 }
