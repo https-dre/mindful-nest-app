@@ -9,10 +9,17 @@ import {
 import Carousel from "../../components/Carousel";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { Project } from "../../components/Project";
+import { projects } from "../../exampledata";
 
 const { width } = Dimensions.get("window")
 
 export const ProjectsTab = () => {
+	let projectComponents = [];
+
+	for(const project in projects) {
+		projectComponents.push(<Project projectData={project} key={project.key} w={170} h={170}/>)
+	}
+
 	return (
 		<View style={styles.container}>
 			<Text
@@ -24,7 +31,7 @@ export const ProjectsTab = () => {
 			>
 				Em Progresso
 			</Text>
-			<Carousel />
+			<Carousel data={projects} w={170} h={170}/>
 
 			<ScrollView style={{paddingHorizontal: 20, marginTop: 10}}>
                 {/* Botão De Criar Projeto */}
@@ -54,10 +61,7 @@ export const ProjectsTab = () => {
 				</View>
 
                 <View style={styles.grid}>
-                    <Project w={170} h={170}/>
-                    <Project w={170} h={170}/>
-                    <Project w={170} h={170}/>
-                    <Project w={170} h={170}/>
+                    {projectComponents}
                 </View>
 
 			</ScrollView>

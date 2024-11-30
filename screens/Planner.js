@@ -1,19 +1,20 @@
 import { SafeAreaView, Text, View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, NavigationContainer } from "@react-navigation/native";
 
 import { useState } from "react";
 
 import { TasksTab } from "./PlannerTabs/TasksTab";
 import { ProjectsTab } from "./PlannerTabs/ProjectsTab";
+import { ViewProject } from "./ViewProject";
 
-const Stack2 = createNativeStackNavigator()
+const Stack2 = createNativeStackNavigator();
 
 export const Planner = () => {
     const navigation = useNavigation();
 
-    const [tasks, setTasks] = useState(null)
-    const [yourProjects, setYourProjects] = useState(null)
+    const [tasks, setTasks] = useState(null);
+    const [yourProjects, setYourProjects] = useState(null);
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
@@ -41,8 +42,8 @@ export const Planner = () => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.bottomBar}>
-                    <View style={[tasks, {width:"50%"}]}></View>
-                    <View style={[yourProjects, {width:"50%"}]}></View>
+                    <View style={[tasks, {width:"50%"}]} />
+                    <View style={[yourProjects, {width:"50%"}]} />
                 </View>
             </View>
             <View style={{flex: 1, marginTop: 5}}>
