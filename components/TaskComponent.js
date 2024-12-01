@@ -3,7 +3,6 @@ import Icon from "react-native-vector-icons/Ionicons";
 import IconFeather from "react-native-vector-icons/Feather";
 
 function handleMarker(status) {
-	console.log(status);
 	switch (status) {
         case 0:
             return (
