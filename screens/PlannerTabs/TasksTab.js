@@ -1,63 +1,202 @@
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import {
+	View,
+	Text,
+	TouchableOpacity,
+	StyleSheet,
+	ScrollView,
+} from "react-native";
+import React, { useState, useEffect } from "react";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { TaskComponent } from "../../components/TaskComponent";
-import { GetStringFormatedDate } from "../../utilities";
+import { formatDate, GetStringFormatedDate } from "../../utilities";
+import { projects } from "../../exampledata";
 
-export const TasksTab = () => { 
+export const TasksTab = () => {
+	const currentDateString = GetStringFormatedDate(new Date());
+	const [tasks, setTasks] = useState([]);
+	const [selected, setSelected] = useState("all");
 
-    const currentDateString = GetStringFormatedDate(new Date());
+	const renderAllTasks = () => {
+		const today = new Date().getDay();
 
-    return (
-        <View style={styles.container}>
-            <View style={{marginTop: 15, flexDirection: "row", justifyContent: "space-between"}}>
-                <View>
-                    <Text style={{fontFamily: "SpaceGroteskMedium", fontSize: 24, color: "#222B45"}}>Tasks Para Hoje</Text>
-                    <Text style={{color: "#5E6676"}}>{currentDateString}</Text>
-                </View>
-                <TouchableOpacity style={styles.addButton}>
-                    <Icon name="plus" size={17} color="#007AFF" />
-                    <Text style={{color: "#007AFF"}}>Adicionar</Text>
-                </TouchableOpacity>
-            </View>
+		const render = projects.flatMap((p) =>
+			p.tasks
+				.filter((t) => new Date(t.date).getDay() === today)
+				.map((t) => {
+					const taskDate = formatDate(new Date(t.date));
+					return (
+						<TaskComponent
+							taskname={t.name}
+							project={p.name}
+							status={t.status}
+							date={taskDate}
+							key={Math.random()}
+						/>
+					);
+				}),
+		);
+		setSelected("all");
+		setTasks(render);
+	};
 
-            <View style={{flexDirection: "row", gap: 20, marginTop: 20}}>
-                <TouchableOpacity>
-                    <Text style={{color: "#007AFF", fontWeight: "bold"}}>Todas</Text>
-                </TouchableOpacity>
+	useEffect(() => {
+		const today = new Date().getDay();
 
-                <TouchableOpacity>
-                    <Text>Abertas</Text>
-                </TouchableOpacity>
+		const render = projects.flatMap((p) =>
+			p.tasks
+				.filter((t) => new Date(t.date).getDay() === today)
+				.map((t) => {
+					const taskDate = formatDate(new Date(t.date));
+					return (
+						<TaskComponent
+							taskname={t.name}
+							project={p.name}
+							status={t.status}
+							date={taskDate}
+							key={Math.random()}
+						/>
+					);
+				}),
+		);
+		setSelected("all");
+		setTasks(render);
+	}, projects);
 
-                <TouchableOpacity>
-                    <Text>Finalizadas</Text>
-                </TouchableOpacity>
+	const renderOpenTasks = () => {
+		const today = new Date().getDay();
 
-                <TouchableOpacity>
-                    <Text>Arquivadas</Text>
-                </TouchableOpacity>
-            </View>
-            
-            <ScrollView style={{marginTop: 30, width: "100%"}}>
-                <TaskComponent />
-            </ScrollView>
-            
-            
-        </View>
-    )
-}
+		const render = projects.flatMap((p) =>
+			p.tasks
+				.filter((t) => new Date(t.date).getDay() === today && t.status === 0)
+				.map((t) => {
+					const taskDate = formatDate(new Date(t.date));
+					return (
+						<TaskComponent
+							taskname={t.name}
+							project={p.name}
+							status={t.status}
+							date={taskDate}
+							key={Math.random()}
+						/>
+					);
+				}),
+		);
+
+		setSelected("open");
+		setTasks(render);
+	};
+
+	const renderFinishedTasks = () => {
+		const today = new Date().getDay();
+
+		const render = projects.flatMap((p) =>
+			p.tasks
+				.filter((t) => new Date(t.date).getDay() === today && t.status === 2)
+				.map((t) => {
+					const taskDate = formatDate(new Date(t.date));
+					return (
+						<TaskComponent
+							taskname={t.name}
+							project={p.name}
+							status={t.status}
+							date={taskDate}
+							key={Math.random()}
+						/>
+					);
+				}),
+		);
+
+		setSelected("done");
+		setTasks(render);
+	};
+
+	return (
+		<View style={styles.container}>
+			<View
+				style={{
+					marginTop: 15,
+					flexDirection: "row",
+					justifyContent: "space-between",
+				}}
+			>
+				<View>
+					<Text
+						style={{
+							fontFamily: "SpaceGroteskMedium",
+							fontSize: 24,
+							color: "#222B45",
+						}}
+					>
+						Tasks Para Hoje
+					</Text>
+					<Text style={{ color: "#5E6676" }}>{currentDateString}</Text>
+				</View>
+				<TouchableOpacity style={styles.addButton}>
+					<Icon name="plus" size={17} color="#007AFF" />
+					<Text style={{ color: "#007AFF" }}>Adicionar</Text>
+				</TouchableOpacity>
+			</View>
+
+			<View style={{ flexDirection: "row", gap: 15, marginTop: 20 }}>
+				<TouchableOpacity onPress={renderAllTasks} style={{ padding: 5 }}>
+					<Text style={selected === "all" ? styles.selectedText : styles.text}>
+						Todas
+					</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity onPress={renderOpenTasks} style={{ padding: 5 }}>
+					<Text style={selected === "open" ? styles.selectedText : styles.text}>
+						Abertas
+					</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity onPress={renderFinishedTasks} style={{ padding: 5 }}>
+					<Text style={selected === "done" ? styles.selectedText : styles.text}>
+						Finalizadas
+					</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					onPress={() => setSelected("archived")}
+					style={{ padding: 5 }}
+				>
+					<Text
+						style={selected === "archived" ? styles.selectedText : styles.text}
+					>
+						Arquivadas
+					</Text>
+				</TouchableOpacity>
+			</View>
+
+			<ScrollView style={{ marginTop: 5, width: "100%" }}>{tasks}</ScrollView>
+		</View>
+	);
+};
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "white",
-        flex: 1,
-        paddingHorizontal: 20
-    },
-    addButton: {
-        flexDirection: "row",
-        backgroundColor: "#E6F2FF",
-        alignItems: "center",
-        padding: 10,
-        borderRadius: 10
-    }
-})
+	container: {
+		backgroundColor: "white",
+		flex: 1,
+		paddingHorizontal: 20,
+	},
+	addButton: {
+		flexDirection: "row",
+		backgroundColor: "#E6F2FF",
+		alignItems: "center",
+		padding: 10,
+		borderRadius: 10,
+	},
+	button: {
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		borderRadius: 5,
+	},
+	selectedButton: {
+		backgroundColor: "#007AFF",
+	},
+	text: {},
+	selectedText: {
+		color: "#007AFF",
+		fontWeight: "bold",
+	},
+});
