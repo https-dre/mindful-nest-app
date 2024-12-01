@@ -8,7 +8,7 @@ import {
 	Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-
+import { useState, useEffect } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { GetStringFormatedDate, formatDate } from "../utilities";
 import { TaskComponent } from "../components/TaskComponent";
@@ -59,15 +59,77 @@ export const ViewProject = () => {
 			}
 		});
 	}
-
-	let taskComponents = [];
-
-    projects.filter((p) => p.key === projectData.key)[0].tasks.map(e => {
-        const taskDate = formatDate(new Date(e.date))
-        taskComponents.push(<TaskComponent taskname={e.name} key={e.key} project={name} date={taskDate} status={e.status}/>)
-    })
-
 	const currentDateString = GetStringFormatedDate(new Date());
+	/* Toda a renderização de Tasks */
+
+	const [taskComponents, setTasks] = useState([]);
+	const [selected, setSelected] = useState("all");
+
+	const currentTasks = projects.filter((p) => p.key === projectData.key)[0]
+		.tasks;
+
+	useEffect(() => {
+		const render = currentTasks.map((t) => {
+			const taskDate = formatDate(new Date(t.date));
+			return (
+				<TaskComponent
+					taskname={t.name}
+					project={projectData.name}
+					status={t.status}
+					date={taskDate}
+					key={Math.random()}
+				/>
+			);
+		});
+		setSelected("all");
+		setTasks(render);
+	}, [currentTasks, projectData]);
+
+	const renderTasks = (tasksArray) => {
+		return currentTasks.map((t) => {
+			const taskDate = formatDate(new Date(t.date));
+			return (
+				<TaskComponent
+					taskname={t.name}
+					project={projectData.name}
+					status={t.status}
+					date={taskDate}
+					key={Math.random()}
+				/>
+			);
+		});
+	};
+
+	const renderAllTasks = () => {
+		const render = renderTasks(currentTasks);
+		setSelected("all");
+		setTasks(render);
+	};
+
+	const renderOpenTasks = () => {
+		const openTasks = currentTasks.filter((t) => t.status === 0);
+		if (openTasks.length === 0) {
+			setSelected("open");
+			setTasks(<Text>Nenhuma Task</Text>);
+			return;
+		}
+		const render = renderTasks(openTasks);
+
+		setSelected("open");
+		setTasks(render);
+	};
+
+	const renderFinishedTasks = () => {
+		const finishedTasks = currentTasks.filter((t) => t.status === 2);
+		if (finishedTasks.length === 0) {
+			setSelected("done");
+			setTasks(<Text>Nenhuma Task</Text>);
+			return;
+		}
+		const render = renderTasks(finishedTasks);
+		setSelected("done");
+		setTasks(render);
+	};
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -205,25 +267,51 @@ export const ViewProject = () => {
 					</TouchableOpacity>
 				</View>
 
-				<View style={{ flexDirection: "row", gap: 20, marginTop: 20 }}>
-					<TouchableOpacity>
-						<Text style={{ color: "#007AFF", fontWeight: "bold" }}>Todas</Text>
+				<View style={{ flexDirection: "row", gap: 15, marginTop: 20 }}>
+					<TouchableOpacity onPress={renderAllTasks} style={{ padding: 5 }}>
+						<Text
+							style={selected === "all" ? styles.selectedText : styles.text}
+						>
+							Todas
+						</Text>
 					</TouchableOpacity>
 
-					<TouchableOpacity>
-						<Text>Abertas</Text>
+					<TouchableOpacity onPress={renderOpenTasks} style={{ padding: 5 }}>
+						<Text
+							style={selected === "open" ? styles.selectedText : styles.text}
+						>
+							Abertas
+						</Text>
 					</TouchableOpacity>
 
-					<TouchableOpacity>
-						<Text>Finalizadas</Text>
+					<TouchableOpacity
+						onPress={renderFinishedTasks}
+						style={{ padding: 5 }}
+					>
+						<Text
+							style={selected === "done" ? styles.selectedText : styles.text}
+						>
+							Finalizadas
+						</Text>
 					</TouchableOpacity>
 
-					<TouchableOpacity>
-						<Text>Arquivadas</Text>
+					<TouchableOpacity
+						onPress={() => setSelected("archived")}
+						style={{ padding: 5 }}
+					>
+						<Text
+							style={
+								selected === "archived" ? styles.selectedText : styles.text
+							}
+						>
+							Arquivadas
+						</Text>
 					</TouchableOpacity>
 				</View>
-
-				{taskComponents}
+				<View>
+					{taskComponents}
+				</View>
+				
 			</ScrollView>
 		</SafeAreaView>
 	);
@@ -258,5 +346,18 @@ const styles = StyleSheet.create({
 		padding: 10,
 		borderRadius: 10,
 		gap: 5,
+	},
+	button: {
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		borderRadius: 5,
+	},
+	selectedButton: {
+		backgroundColor: "#007AFF",
+	},
+	text: {},
+	selectedText: {
+		color: "#007AFF",
+		fontWeight: "bold",
 	},
 });
