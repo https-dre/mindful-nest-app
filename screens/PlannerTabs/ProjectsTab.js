@@ -17,7 +17,7 @@ export const ProjectsTab = () => {
 	let projectComponents = [];
 
 	for(const project in projects) {
-		projectComponents.push(<Project projectData={project} key={project.key} w={170} h={170}/>)
+		projectComponents.push(<Project projectData={project} key={Math.random()} w={170} h={170}/>)
 	}
 
 	return (
