@@ -86,7 +86,7 @@ export const ViewProject = () => {
 	}, [currentTasks, projectData]);
 
 	const renderTasks = (tasksArray) => {
-		return currentTasks.map((t) => {
+		return tasksArray.map((t) => {
 			const taskDate = formatDate(new Date(t.date));
 			return (
 				<TaskComponent
