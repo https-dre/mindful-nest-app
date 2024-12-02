@@ -1358,6 +1358,12 @@
     shell-quote "^1.7.3"
     sudo-prompt "^9.0.0"
 
+"@react-native-community/datetimepicker@https://github.com/react-native-datetimepicker/datetimepicker.git":
+  version "8.2.0"
+  resolved "https://github.com/react-native-datetimepicker/datetimepicker.git#80446e4d75ea95d0864e224d53c9845a3e368047"
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-vector-icons/common@^11.0.0":
   version "11.0.0"
   resolved "https://registry.npmmirror.com/@react-native-vector-icons/common/-/common-11.0.0.tgz#c3b2d1220b2d7869564c77312691e234e32ab413"
