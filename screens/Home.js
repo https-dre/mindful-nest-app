@@ -43,11 +43,11 @@ export const Home = ({navigation}) => {
 
 
           { /* Lista de Projetos */ }
-          <View>
+          <View style={{marginBottom: 20}}>
             <View style={{flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 20}}>
               <View>
                 <Text style={{fontFamily: "SpaceGroteskMedium", fontSize: 18}}>Projetos</Text>
-                <Text>Você tem 3 projetos em Progresso!</Text>
+                <Text>Você tem {projects.length} projetos em Progresso!</Text>
               </View>
 
               <TouchableOpacity style={styles.blueButtom}>
