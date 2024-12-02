@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
+import { CalendarEvent } from '../components/CalendarEvent';
 
 const months = [
   'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
@@ -40,7 +41,7 @@ export const CalendarScreen = () => {
 
       <View style={styles.calendarContainer}>
         <Calendar
-          key={currentMonthData.month} // Força a recriação do componente
+          key={currentMonthData.month} // Isso aqui força a recriação do componente
           current={currentMonthData.month}
           onDayPress={(day) => setSelectedDate(day.dateString)}
           markedDates={{
@@ -62,6 +63,12 @@ export const CalendarScreen = () => {
           renderArrow={() => null}
         />
       </View>
+
+      <Text style={{fontFamily: "SpaceGroteskMedium", fontSize: 20, margin: 20}}>Hoje</Text>
+      <ScrollView style={{paddingHorizontal: 20, maxHeight: "80%"}}>
+          <CalendarEvent data={{eventName: "Um evento aí", deadline: "10 pra meio dia", eventDescription: "Me matar"}}/>
+        
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -99,8 +106,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   calendarContainer: {
-    width: '80%',
-    alignSelf: "center"
+    width: "80%",
+    alignSelf: "center",
   },
   calendarTitle: {
     fontSize: 24,
