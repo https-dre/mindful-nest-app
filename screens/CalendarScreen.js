@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
@@ -8,7 +8,7 @@ const months = [
 ];
 
 export const CalendarScreen = () => {
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Mês atual por padrão
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedDate, setSelectedDate] = useState('');
 
   const getMonthData = (monthIndex) => {
@@ -23,7 +23,7 @@ export const CalendarScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={{fontFamily: "SpaceGroteskMedium", fontSize: 20}}>Calendário</Text>
+      <Text style={{fontFamily: "SpaceGroteskMedium", fontSize: 20, margin: 20}}>Calendário</Text>
       <ScrollView style={styles.buttonContainer} horizontal={true}>
         {months.map((month, index) => (
           <TouchableOpacity
@@ -50,7 +50,16 @@ export const CalendarScreen = () => {
               selectedTextColor: 'white',
             },
           }}
-          hideExtraDays={true}
+          hideExtraDays={false}
+          theme={{
+            weekDayNames: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+            selectedDayBackgroundColor: '#007AFF',
+            todayTextColor: '#007AFF',
+            monthTextColor: 'white',
+            dayTextColor: 'black',
+          }}
+          
+          renderArrow={() => null}
         />
       </View>
     </SafeAreaView>
@@ -60,12 +69,12 @@ export const CalendarScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white"
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginBottom: 10,
-    maxHeight: 50,
-    borderWidth: 1
+    maxHeight: 45,
+    marginLeft: 10
   },
   button: {
     minWidth: 100,
@@ -90,8 +99,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   calendarContainer: {
-    marginTop: 20,
-    width: '100%',
+    width: '80%',
+    alignSelf: "center"
   },
   calendarTitle: {
     fontSize: 24,
