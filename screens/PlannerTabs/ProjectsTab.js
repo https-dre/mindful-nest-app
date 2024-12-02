@@ -8,17 +8,16 @@ import {
 } from "react-native";
 import Carousel from "../../components/Carousel";
 import Icon from "react-native-vector-icons/FontAwesome6";
-import { Project } from "../../components/Project";
+import { SquareProject } from "../../components/SquareProject";
 import { projects } from "../../exampledata";
 
-const { width } = Dimensions.get("window")
 
 export const ProjectsTab = () => {
 	let projectComponents = [];
 
-	for(const project in projects) {
-		projectComponents.push(<Project projectData={project} key={Math.random()} w={170} h={170}/>)
-	}
+	projects.map(p => {
+		projectComponents.push(<SquareProject data={p} key={Math.random()} size={170} />)
+	})
 
 	return (
 		<View style={styles.container}>
@@ -80,7 +79,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#E6F2FF",
         alignItems: "center",
         padding: 10,
-        borderRadius: 10
+        borderRadius: 10,
+		gap: 5
     },
     grid: {
         flexDirection: 'row',
@@ -88,6 +88,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between', // Distribui os itens com espaço entre eles
         width: '100%',
         paddingHorizontal: 10,
-        marginTop: 10
+        marginTop: 20
     },
 });
