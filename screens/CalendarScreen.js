@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { CalendarEvent } from '../components/CalendarEvent';
+import { BottomSheetCreateEvent } from '../components/BottomSheetCreateEvent';
 
 const months = [
   'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
@@ -11,6 +12,7 @@ const months = [
 export const CalendarScreen = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedDate, setSelectedDate] = useState('');
+  const modalRef = useRef(null);
 
   const getMonthData = (monthIndex) => {
     const year = new Date().getFullYear(); // Use o ano atual
@@ -19,6 +21,11 @@ export const CalendarScreen = () => {
       name: months[monthIndex],
     };
   };
+
+  const dayPress = (data) => {
+    setSelectedDate(data);
+    modalRef.current?.sendData(data);
+  }
 
   const currentMonthData = getMonthData(selectedMonth);
 
@@ -43,7 +50,7 @@ export const CalendarScreen = () => {
         <Calendar
           key={currentMonthData.month} // Isso aqui força a recriação do componente
           current={currentMonthData.month}
-          onDayPress={(day) => setSelectedDate(day.dateString)}
+          onDayPress={dayPress}
           markedDates={{
             [selectedDate]: {
               selected: true,
@@ -69,6 +76,8 @@ export const CalendarScreen = () => {
           <CalendarEvent data={{eventName: "Um evento aí", deadline: "10 pra meio dia", eventDescription: "Me matar"}}/>
         
       </ScrollView>
+
+      <BottomSheetCreateEvent modalizeRef={modalRef}/>
     </SafeAreaView>
   );
 };
