@@ -1,4 +1,4 @@
-export const tasks = [
+export let tasks = [
     {
         name: "Reunião com o Cliente",
         date: new Date().toISOString(),
@@ -21,7 +21,7 @@ export const tasks = [
     }
 ]
 
-export const projects = [
+export let projects = [
     {
         name: "Simple App Design",
         progress: "57%",
@@ -60,7 +60,7 @@ export const projects = [
     }
 ]
 
-const usersData = [
+export let usersData = [
 	{
 		name: "andre_dias",
 		perfil: require("./assets/foto-perfil-andre.png"),
