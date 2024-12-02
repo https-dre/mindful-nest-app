@@ -13,37 +13,32 @@ const Stack2 = createNativeStackNavigator();
 export const Planner = () => {
     const navigation = useNavigation();
 
-    const [tasks, setTasks] = useState(null);
+    const [tasks, setTasks] = useState("");
     const [yourProjects, setYourProjects] = useState(null);
+    const [selected, setSelected] = useState("Tasks")
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <View  style={styles.navBar}>
                 <View style={styles.navMenu}>
                     <TouchableOpacity 
-                        style={styles.navButton}
+                        style={selected === "Tasks" ? styles.selected : styles.navButton}
                         onPress={()=> {
                             navigation.navigate("Tasks")
-                            setTasks(styles.selected)
-                            setYourProjects(null)
+                            setSelected("Tasks")
                         }}
                     >
                         <Text>Tasks Para Hoje</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
-                        style={styles.navButton}
+                        style={selected === "Projects" ? styles.selected : styles.navButton}
                         onPress={()=> {
                             navigation.navigate("Projects")
-                            setTasks(null)
-                            setYourProjects(styles.selected)
+                            setSelected("Projects")
                         }}
                     >
                         <Text>Todos os Projetos</Text>
                     </TouchableOpacity>
-                </View>
-                <View style={styles.bottomBar}>
-                    <View style={[tasks, {width:"50%"}]} />
-                    <View style={[yourProjects, {width:"50%"}]} />
                 </View>
             </View>
             <View style={{flex: 1, marginTop: 5}}>
@@ -86,10 +81,13 @@ const styles = StyleSheet.create({
         backgroundColor: "transparent"
     },
     selected: {
-        padding: 1,
-        backgroundColor: "#007AFF",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
         width: "50%",
-        borderRadius: 10
+        backgroundColor: 'transparent',
+        borderBottomWidth: 2,
+        borderColor: "#007AFF"
     },
     bottomBar: {
         width: "100%",
