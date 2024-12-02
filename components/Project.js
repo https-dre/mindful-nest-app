@@ -39,7 +39,7 @@ export const Project = ({projectData = projects[0], w = 250, h = 170 }) => {
 
       
       <View style={{alignSelf: "center", width: "100%"}}>
-        <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+        <View style={{flexDirection: "row", justifyContent: "space-between", marginBottom: 5}}>
           <Text style={{color: "#EBEBEB"}}>Progresso</Text>
           <Text style={{color: "#EBEBEB"}}>{projectData.progress}</Text>
         </View>

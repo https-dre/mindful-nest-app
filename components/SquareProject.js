@@ -23,15 +23,15 @@ export const SquareProject = ({ size = 150, data }) => {
             <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
                 <TouchableOpacity
                     onPress={handleNavigation}>
-                    <Text style={{ fontSize: 20, color: "white", maxWidth: 70 }}>{data.name}</Text>
+                    <Text style={{ fontSize: 20, color: "white", maxWidth: 150}}>{data.name}</Text>
                 </TouchableOpacity>
 
                 <Icon name="ellipsis-vertical" size={20} color="white" />
             </View>
 
 
-            <View style={{ alignSelf: "center", width: "100%" }}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <View style={{ alignSelf: "center", width: "100%"}}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 5}}>
                     <Text style={{ color: "#EBEBEB" }}>Progresso</Text>
                     <Text style={{ color: "#EBEBEB" }}>{data.progress}</Text>
                 </View>
@@ -43,8 +43,6 @@ export const SquareProject = ({ size = 150, data }) => {
             </View>
 
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                {participantesImage}
-
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
                     <Icon name="calendar" color="white" size={20} />
                     <Text style={{ color: "white" }}>{data.deadline}</Text>
