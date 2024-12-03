@@ -10,6 +10,7 @@ import {
 import { Calendar } from 'react-native-calendars';
 import { CalendarEvent } from '../components/CalendarEvent';
 import { BottomSheetCreateEvent } from '../components/BottomSheetCreateEvent';
+import { formatHours } from '../utilities';
 
 const months = [
     'Janeiro',
@@ -32,28 +33,33 @@ export const CalendarScreen = () => {
     const [markedDates, setMarkedDates] = useState({});
     const modalRef = useRef(null);
     const [calendarEvents, setCalendarEvents] = useState([]);
+    const [allEvents, setAllEvents] = useState([]);
 
     const dayPress = (dayInfo) => {
         setSelectedDate(dayInfo);
         modalRef.current?.sendToModal(dayInfo);
     };
 
-    const pushCalendarEvent = (eventInfo) => {
-        const data = {
-            eventName: eventInfo.eventName,
-            eventDescription: eventInfo.eventDescription,
-            deadline: '10:00',
-        };
-      setCalendarEvents((prev) => [...prev, <CalendarEvent data={data} key={Math.random()} />]);
-    };
+    useEffect(() => {
+        const components = allEvents.map(eventInfo => {
+            const data = {
+                eventName: eventInfo.eventName,
+                eventDescription: eventInfo.eventDescription,
+                deadline: `${formatHours(eventInfo.eventStart)} - ${formatHours(eventInfo.eventEnd)}`
+            };
+            return <CalendarEvent data={data} key={Math.random()} />
+        });
+        setCalendarEvents(components);
+    }, [allEvents]);
 
     const calendarRef = useRef({
         addEvent: (eventInfo) => {
+            console.log('Add Event: ', eventInfo);
             setMarkedDates((prev) => ({
                 ...prev,
                 [eventInfo.eventDate]: { marked: true },
             }));
-            pushCalendarEvent(eventInfo);
+            setAllEvents((prev) => [...prev, eventInfo]);
         },
     });
 
