@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useImperativeHandle } from "react";
 
-export const CalendarEvent = ({ data, color = "blue", longPress }) => {
+export const CalendarEvent = ({ data, color = "#31dae6", longPress }) => {
 
     return (
         <View style={{ gap: 10, borderBottomWidth: 1, borderColor: "#ccd3e1", marginBottom: 10, paddingVertical: 10 }}>
