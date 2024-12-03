@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Modalize } from 'react-native-modalize';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Category } from './Category';
+import { TimePickerInput } from './TimePickerInput';
 
 export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
     const localModalizeRef = useRef(null);
@@ -19,8 +20,8 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
         eventName: '',
         eventDescription: '',
         eventDate: '',
-        eventStart: '',
-        eventEnd: '',
+        eventStart: new Date(),
+        eventEnd: new Date(),
     });
 
     const handleInputChange = (field, value) => {
@@ -55,8 +56,8 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
             eventName: '',
             eventDescription: '',
             eventDate: '',
-            eventStart: '',
-            eventEnd: '',
+            eventStart: new Date(),
+            eventEnd: new Date(),
         });
     };
 
@@ -135,50 +136,20 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
                         </View>
                     </View>
 
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            width: '100%',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <View style={styles.textBoxView}>
-                            <TextInput
-                                style={{ color: '#8F9BB3' }}
-                                placeholder="Começo"
-                                placeholderTextColor="#8F9BB3"
-                                onChangeText={(text) =>
-                                    handleInputChange('eventStart', text)
-                                }
-                                value={formData.eventStart}
-                            />
-                            <View style={{ justifyContent: 'center' }}>
-                                <Icon
-                                    name="time-outline"
-                                    color="#8F9BB3"
-                                    size={20}
-                                />
-                            </View>
-                        </View>
+                    <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
+                        <TimePickerInput
+                            onChange={(selectedTime) =>
+                                handleInputChange('eventStart', selectedTime)
+                            }
+                            value={formData.eventStart}
+                        />
 
-                        <View style={styles.textBoxView}>
-                            <TextInput
-                                style={{ color: '#8F9BB3' }}
-                                placeholder="Fim"
-                                placeholderTextColor="#8F9BB3"
-                                onChangeText={(text) =>
-                                    handleInputChange('eventEnd', text)
-                                }
-                                value={formData.eventEnd}
-                            />
-                            <View style={{ justifyContent: 'center' }}>
-                                <Icon
-                                    name="time-outline"
-                                    color="#8F9BB3"
-                                    size={20}
-                                />
-                            </View>
-                        </View>
+                        <TimePickerInput
+                            onChange={(selectedTime) =>
+                                handleInputChange('eventEnd', selectedTime)
+                            }
+                            value={formData.eventEnd}
+                        />
                     </View>
                 </View>
 
