@@ -163,7 +163,7 @@ export const TasksTab = () => {
 				}
 			})
 			lastRender()
-			console.error(newTask)
+			setNewTask(null)
 		}
 	}, [newTask])
 

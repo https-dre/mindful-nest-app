@@ -162,7 +162,7 @@ export const BoxCreateTask = ({
                     >
                         <Picker.Item label="Aberto" value={0} style={styles.pPickerItem}/>
                         <Picker.Item label="Em andamento" value={1} style={styles.pPickerItem}/>
-                        <Picker.Item label="Aberto" value={2} style={styles.pPickerItem}/>
+                        <Picker.Item label="Concluído" value={2} style={styles.pPickerItem}/>
                         <Picker.Item label="Arquivada" value={3} style={styles.pPickerItem}/>
                     </Picker>
                 </View>
