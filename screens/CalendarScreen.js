@@ -139,7 +139,7 @@ export const CalendarScreen = () => {
             <ScrollView
                 style={{
                     paddingHorizontal: 20,
-                    maxHeight: '80%',
+                    maxHeight: 200,
                 }}
             >
                 {/* <CalendarEvent
