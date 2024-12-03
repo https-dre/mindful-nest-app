@@ -27,7 +27,7 @@ export const TimePickerInput = ({ onChange, value }) => {
         <View style={styles.inputContainer}>
             <TouchableOpacity
                 style={styles.inputButton}
-                onLongPress={() => setShowPicker(true)}
+                onPress={() => setShowPicker(true)}
             >
                 {!showPicker && (
                     <Text style={styles.inputText}>
