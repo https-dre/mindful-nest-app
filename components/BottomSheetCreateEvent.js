@@ -12,18 +12,34 @@ import { Modalize } from 'react-native-modalize';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Category } from './Category';
 
-export const BottomSheetCreateEvent = ({ modalizeRef }) => {
+export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
     const localModalizeRef = useRef(null);
-    const [currentData, setCurrentData] = useState({});
     const navigation = useNavigation();
+    const [formData, setFormData] = useState({
+        eventName: '',
+        eventDescription: '',
+        eventDate: '',
+        eventStart: '',
+        eventEnd: '',
+    });
 
-    const sendData = (data) => {
-        navigation.setOptions({
-            tabBarStyle: { display: 'none' }, // Oculta a Tab Bar
-        });
-        setCurrentData(data);
-        localModalizeRef.current?.open();
+    const handleInputChange = (field, value) => {
+        setFormData((prev) => ({ ...prev, [field]: value }));
     };
+
+    React.useImperativeHandle(modalizeRef, () => ({
+        sendToModal: (data) => {
+            console.log('SendData', data);
+            navigation.setOptions({
+                tabBarStyle: {
+                    display: 'none',
+                },
+            });
+
+            handleInputChange('eventDate', data.dateString);
+            localModalizeRef.current?.open();
+        },
+    }));
 
     const close = () => {
         navigation.setOptions({
@@ -34,19 +50,33 @@ export const BottomSheetCreateEvent = ({ modalizeRef }) => {
                 borderTopWidth: 0,
             },
         });
+
+        setFormData({
+            eventName: '',
+            eventDescription: '',
+            eventDate: '',
+            eventStart: '',
+            eventEnd: '',
+        });
     };
 
-    React.useImperativeHandle(modalizeRef, () => ({
-        sendData,
-        close,
-    }));
+    const handleCreateEvent = () => {
+        if (formData.eventName === '' || formData.eventName === null) {
+            localModalizeRef.current.close();
+            console.log('Nome não selecionado');
+            return;
+        }
+        console.log('handleCreateEvent');
+        calendarRef.current?.addEvent(formData);
+        localModalizeRef.current.close();
+    };
 
     return (
         <Modalize
             ref={localModalizeRef}
             snapPoint={600}
             maxHeight={600}
-            panGestureEnabled={true}
+            panGestureEnabled={false}
             closeOnOverlayTap={true}
             handlePosition="top"
             dragToss={0.6}
@@ -77,19 +107,25 @@ export const BottomSheetCreateEvent = ({ modalizeRef }) => {
                         placeholder="Nome do Evento*"
                         style={styles.modalInput}
                         placeholderTextColor="#8F9BB3"
+                        onChangeText={(text) =>
+                            handleInputChange('eventName', text)
+                        }
+                        value={formData.eventName}
                     />
                     <TextInput
                         placeholder="Digite a Descrição Do Evento Aqui"
                         style={styles.modalInput}
                         placeholderTextColor="#8F9BB3"
+                        onChangeText={(text) =>
+                            handleInputChange('eventDescription', text)
+                        }
+                        value={formData.eventDescription}
                     />
 
                     <View style={[styles.textBoxView, { width: '100%' }]}>
-                        <TextInput
-                            placeholder="dd/mm/aaaa"
-                            style={{ width: '90%' }}
-                            placeholderTextColor="#8F9BB3"
-                        />
+                        <Text style={{ color: '#8F9BB3', alignSelf: 'center' }}>
+                            {formData.eventDate}
+                        </Text>
                         <View style={{ justifyContent: 'center' }}>
                             <Icon
                                 name="calendar-outline"
@@ -108,8 +144,13 @@ export const BottomSheetCreateEvent = ({ modalizeRef }) => {
                     >
                         <View style={styles.textBoxView}>
                             <TextInput
+                                style={{ color: '#8F9BB3' }}
                                 placeholder="Começo"
                                 placeholderTextColor="#8F9BB3"
+                                onChangeText={(text) =>
+                                    handleInputChange('eventStart', text)
+                                }
+                                value={formData.eventStart}
                             />
                             <View style={{ justifyContent: 'center' }}>
                                 <Icon
@@ -122,8 +163,13 @@ export const BottomSheetCreateEvent = ({ modalizeRef }) => {
 
                         <View style={styles.textBoxView}>
                             <TextInput
+                                style={{ color: '#8F9BB3' }}
                                 placeholder="Fim"
                                 placeholderTextColor="#8F9BB3"
+                                onChangeText={(text) =>
+                                    handleInputChange('eventEnd', text)
+                                }
+                                value={formData.eventEnd}
                             />
                             <View style={{ justifyContent: 'center' }}>
                                 <Icon
@@ -137,21 +183,42 @@ export const BottomSheetCreateEvent = ({ modalizeRef }) => {
                 </View>
 
                 {/* Categoria */}
-                <View style={{marginTop: 20}}>
-                    <Text style={[styles.modalTitle, {alignSelf: "left"}]}>Categoria</Text>
+                <View style={{ marginTop: 20 }}>
+                    <Text style={[styles.modalTitle, { alignSelf: 'left' }]}>
+                        Categoria
+                    </Text>
 
                     <ScrollView horizontal={true}>
-                       {/*  <Category /> */}
+                        {/*  <Category /> */}
                     </ScrollView>
 
-                    <TouchableOpacity style={{flexDirection: "row", alignItems: "center", marginVertical: 10}}>
-                        <Icon name="add" color="#007AFF" size={20}/>
-                        <Text style={{color: "#007AFF", fontWeight: "bold"}}>Adicionar</Text>
+                    <TouchableOpacity
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginVertical: 10,
+                        }}
+                    >
+                        <Icon name="add" color="#007AFF" size={20} />
+                        <Text style={{ color: '#007AFF', fontWeight: 'bold' }}>
+                            Adicionar
+                        </Text>
                     </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity style={styles.createEventButton}>
-                    <Text style={{color: "white", fontSize: 18, fontWeight: "bold"}}>Criar Evento</Text>
+                <TouchableOpacity
+                    style={styles.createEventButton}
+                    onPress={handleCreateEvent}
+                >
+                    <Text
+                        style={{
+                            color: 'white',
+                            fontSize: 18,
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        Criar Evento
+                    </Text>
                 </TouchableOpacity>
             </View>
         </Modalize>
@@ -178,6 +245,7 @@ const styles = StyleSheet.create({
         borderColor: '#8F9BB3',
         padding: 20,
         borderRadius: 10,
+        color: '#8F9BB3',
     },
     textBoxView: {
         borderWidth: 1,
@@ -191,10 +259,10 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     createEventButton: {
-        backgroundColor: "#1D1F24",
+        backgroundColor: '#1D1F24',
         padding: 20,
-        alignItems: "center",
+        alignItems: 'center',
         borderRadius: 10,
-        marginTop: 30
-    }
+        marginTop: 30,
+    },
 });
