@@ -12,6 +12,7 @@ import { ChoosePlan } from "./screens/Login/ChoosePlan";
 import { Login } from "./screens/Login/Login";
 import { BottomTabRouter } from "./BottomTabRouter"
 import { ViewProject } from './screens/ViewProject';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Stack = createNativeStackNavigator()
 
@@ -25,6 +26,7 @@ const App = () => {
   }
   
   return (
+    <SafeAreaView style={{flex: 1}}>
       <NavigationContainer style={{flex: 1}}>
           <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="BottomTab">
             <Stack.Screen name="LoginOrRegister" component={LoginOrRegister} />
@@ -37,6 +39,7 @@ const App = () => {
             <Stack.Screen name="ViewProject" component={ViewProject} />
           </Stack.Navigator>
       </NavigationContainer>
+    </SafeAreaView>
   )
 }
 
