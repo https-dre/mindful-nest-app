@@ -24,7 +24,7 @@ export const Planner = () => {
                     <TouchableOpacity 
                         style={selected === "Tasks" ? styles.selected : styles.navButton}
                         onPress={()=> {
-                            navigation.navigate("Tasks")
+                            navigation.navigate("Planner", {screen:"Tasks"})
                             setSelected("Tasks")
                         }}
                     >
@@ -33,7 +33,7 @@ export const Planner = () => {
                     <TouchableOpacity 
                         style={selected === "Projects" ? styles.selected : styles.navButton}
                         onPress={()=> {
-                            navigation.navigate("Projects")
+                            navigation.navigate("Planner", {screen:"Projects"})
                             setSelected("Projects")
                         }}
                     >
