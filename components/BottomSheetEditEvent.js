@@ -42,7 +42,8 @@ export const BottomSheetEditEvent = ({ modalizeRef, calendarRef }) => {
     }
 
     const handleDeleteEvent = () => {
-
+        calendarRef.current?.deleteEvent(formData.id);
+        localModalizeRef.current?.close();
     }
 
     const close = () => {

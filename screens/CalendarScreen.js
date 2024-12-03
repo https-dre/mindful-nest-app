@@ -41,7 +41,6 @@ export const CalendarScreen = () => {
         },
         editEvent: (eventInfo) => {
             console.log('editEvent: ', eventInfo);
-
             setAllEvents((prevEvents) => {
             
                 const updatedEvents = prevEvents.map((event) =>
@@ -61,7 +60,13 @@ export const CalendarScreen = () => {
                 return updatedEvents;
             });
         },
-        deleteEvent: (eventInfo) => {},
+        deleteEvent: (eventId) => {
+            console.log(eventId);
+            setAllEvents(prevEvents => {
+                const events = prevEvents.filter(e => e.id !== eventId);
+                return events;
+            })
+        },
     });
     const [calendarEvents, setCalendarEvents] = useState([]);
     const [allEvents, setAllEvents] = useState([]);
