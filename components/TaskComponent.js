@@ -50,6 +50,27 @@ function handleMarker(status) {
 					color="#007AFF"
 				/>
 			);
+		case 3:
+			return (
+				<View
+					key={Math.random()}
+					style={{
+						backgroundColor: "#72aff6",
+						borderRadius: 100,
+						width: 30,
+						height: 30,
+                        alignItems: "center",
+                        justifyContent: "center"
+					}}
+				>
+					<Icon
+						key={Math.random()}
+						name="folder-outline"
+						size={17}
+						color="#156fd7"
+					/>
+				</View>
+			)
 		default:
 			console.log("Marker error in TaskComponent");
 			return <View key={Math.random()} />;
