@@ -40,8 +40,6 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
 
     const handleCreateEvent = () => {
         if (formData.eventName === '' || formData.eventName === null) {
-            localModalizeRef.current.close();
-            ('Nome não selecionado');
             return;
         }
         calendarRef.current?.addEvent(formData);

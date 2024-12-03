@@ -37,8 +37,8 @@ export const BottomSheetEditEvent = ({ modalizeRef, calendarRef }) => {
     }));
 
     const handleEditEvent = () => {
-        localModalizeRef.current?.close();
         calendarRef.current?.editEvent(formData);
+        localModalizeRef.current?.close();
     }
 
     const handleDeleteEvent = () => {
@@ -178,12 +178,12 @@ export const BottomSheetEditEvent = ({ modalizeRef, calendarRef }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={[styles.editEventButton, {backgroundColor: "white"}]}
+                    style={[styles.editEventButton, {backgroundColor: "#f4adad"}]}
                     onPress={handleDeleteEvent}
                 >
                     <Text
                         style={{
-                            color: "#1D1F24",
+                            color: "#ff3737",
                             fontSize: 18,
                             fontWeight: 'bold',
                         }}
