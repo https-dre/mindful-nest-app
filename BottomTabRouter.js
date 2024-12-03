@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Octicons';
 import { Home } from "./screens/Home";
 import { Planner } from "./screens/Planner";
 import { CalendarScreen } from './screens/CalendarScreen';
+import { Community } from './screens/Community';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,7 +53,7 @@ export function BottomTabRouter() {
             screenOptions={tabNavigatorScreenOptions}
         >
           <Tab.Screen name="Home" component={Home} />
-          <Tab.Screen name="Comunidade" component={Home} />
+          <Tab.Screen name="Comunidade" component={Community} />
           <Tab.Screen name="Planner" component={Planner} />
           <Tab.Screen name="Calendar" component={CalendarScreen} />
           <Tab.Screen name="Settings" component={Home} />
