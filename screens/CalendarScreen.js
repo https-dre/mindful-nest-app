@@ -11,6 +11,7 @@ import { Calendar } from 'react-native-calendars';
 import { CalendarEvent } from '../components/CalendarEvent';
 import { BottomSheetCreateEvent } from '../components/BottomSheetCreateEvent';
 import { formatHours } from '../utilities';
+import { BottomSheetEditEvent } from '../components/BottomSheetEditEvent';
 
 const months = [
     'Janeiro',
@@ -32,39 +33,75 @@ export const CalendarScreen = () => {
     const [selectedDate, setSelectedDate] = useState('');
     const [markedDates, setMarkedDates] = useState({});
     const modalRef = useRef(null);
+    const editModalRef = useRef(null);
+
+    const calendarRef = useRef({
+        addEvent: (eventInfo) => {
+            setAllEvents((prev) => [...prev, eventInfo]);
+        },
+        editEvent: (eventInfo) => {
+            console.log('editEvent: ', eventInfo);
+
+            setAllEvents((prevEvents) => {
+            
+                const updatedEvents = prevEvents.map((event) =>
+                    event.id === eventInfo.id
+                        ? {
+                              ...event,
+                              eventName: eventInfo.eventName,
+                              eventDescription: eventInfo.eventDescription,
+                              eventDate: eventInfo.eventDate,
+                              eventStart: eventInfo.eventStart,
+                              eventEnd: eventInfo.eventEnd,
+                          }
+                        : event,
+                );
+
+                console.log('updatedEvents após atualização:', updatedEvents);
+                return updatedEvents;
+            });
+        },
+        deleteEvent: (eventInfo) => {},
+    });
     const [calendarEvents, setCalendarEvents] = useState([]);
     const [allEvents, setAllEvents] = useState([]);
 
     const dayPress = (dayInfo) => {
+        const data = {
+            dayInfo,
+            id: null,
+        };
         setSelectedDate(dayInfo);
-        modalRef.current?.sendToModal(dayInfo);
+        modalRef.current?.sendToModal(data);
+    };
+
+    const handleCalendarEventLongClick = (id) => {
+        const eventInfo = allEvents.filter((e) => e.id === id)[0];
+        editModalRef.current?.sendToModal(eventInfo);
     };
 
     useEffect(() => {
-        const components = allEvents.map(eventInfo => {
+        const components = allEvents.map((eventInfo) => {
             const data = {
+                id: eventInfo.id,
                 eventName: eventInfo.eventName,
                 eventDescription: eventInfo.eventDescription,
-                deadline: `${formatHours(eventInfo.eventStart)} - ${formatHours(eventInfo.eventEnd)}`
+                deadline: `${formatHours(eventInfo.eventStart)} - ${formatHours(eventInfo.eventEnd)}`,
             };
-            return <CalendarEvent data={data} key={Math.random()} />
+            return (
+                <CalendarEvent
+                    data={data}
+                    key={Math.random()}
+                    longPress={handleCalendarEventLongClick}
+                />
+            );
         });
+
         setCalendarEvents(components);
     }, [allEvents]);
 
-    const calendarRef = useRef({
-        addEvent: (eventInfo) => {
-            console.log('Add Event: ', eventInfo);
-            setMarkedDates((prev) => ({
-                ...prev,
-                [eventInfo.eventDate]: { marked: true },
-            }));
-            setAllEvents((prev) => [...prev, eventInfo]);
-        },
-    });
-
     const getMonthData = (monthIndex) => {
-        const year = new Date().getFullYear(); // Use o ano atual
+        const year = new Date().getFullYear();
         return {
             month: `${year}-${monthIndex + 1 < 10 ? '0' : ''}${monthIndex + 1}`,
             name: months[monthIndex],
@@ -109,7 +146,7 @@ export const CalendarScreen = () => {
 
             <View style={styles.calendarContainer}>
                 <Calendar
-                    key={currentMonthData.month} // Isso aqui força a recriação do componente
+                    key={currentMonthData.month}
                     current={currentMonthData.month}
                     onDayPress={dayPress}
                     markedDates={markedDates}
@@ -160,6 +197,11 @@ export const CalendarScreen = () => {
 
             <BottomSheetCreateEvent
                 modalizeRef={modalRef}
+                calendarRef={calendarRef}
+            />
+
+            <BottomSheetEditEvent
+                modalizeRef={editModalRef}
                 calendarRef={calendarRef}
             />
         </SafeAreaView>

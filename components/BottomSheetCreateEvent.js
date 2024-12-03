@@ -22,6 +22,7 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
         eventDate: '',
         eventStart: new Date(),
         eventEnd: new Date(),
+        id: null
     });
 
     const handleInputChange = (field, value) => {
@@ -30,17 +31,22 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
 
     React.useImperativeHandle(modalizeRef, () => ({
         sendToModal: (data) => {
-            console.log('SendData', data);
-            navigation.setOptions({
-                tabBarStyle: {
-                    display: 'none',
-                },
-            });
-
-            handleInputChange('eventDate', data.dateString);
+            
+            handleInputChange('eventDate', data.dayInfo.dateString);
+            handleInputChange('id', Math.random());
             localModalizeRef.current?.open();
         },
     }));
+
+    const handleCreateEvent = () => {
+        if (formData.eventName === '' || formData.eventName === null) {
+            localModalizeRef.current.close();
+            ('Nome não selecionado');
+            return;
+        }
+        calendarRef.current?.addEvent(formData);
+        localModalizeRef.current.close();
+    };
 
     const close = () => {
         navigation.setOptions({
@@ -58,18 +64,16 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
             eventDate: '',
             eventStart: new Date(),
             eventEnd: new Date(),
+            id: null
         });
     };
 
-    const handleCreateEvent = () => {
-        if (formData.eventName === '' || formData.eventName === null) {
-            localModalizeRef.current.close();
-            console.log('Nome não selecionado');
-            return;
-        }
-        console.log('handleCreateEvent');
-        calendarRef.current?.addEvent(formData);
-        localModalizeRef.current.close();
+    const open = () => {
+        navigation.setOptions({
+            tabBarStyle: {
+                display: 'none',
+            },
+        });
     };
 
     return (
@@ -82,6 +86,7 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
             handlePosition="top"
             dragToss={0.6}
             onClose={close}
+            onOpen={open}
             modalStyle={{
                 backgroundColor: 'white',
                 borderTopLeftRadius: 40,
@@ -124,7 +129,7 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
                     />
 
                     <View style={[styles.textBoxView, { width: '100%' }]}>
-                        <Text style={{ color: '#8F9BB3', alignSelf: 'center' }}>
+                        <Text style={{ color: 'black', alignSelf: 'center' }}>
                             {formData.eventDate}
                         </Text>
                         <View style={{ justifyContent: 'center' }}>
@@ -136,7 +141,13 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
                         </View>
                     </View>
 
-                    <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                        }}
+                    >
                         <TimePickerInput
                             onChange={(selectedTime) =>
                                 handleInputChange('eventStart', selectedTime)
@@ -216,7 +227,7 @@ const styles = StyleSheet.create({
         borderColor: '#8F9BB3',
         padding: 20,
         borderRadius: 10,
-        color: '#8F9BB3',
+        color: 'black',
     },
     textBoxView: {
         borderWidth: 1,
