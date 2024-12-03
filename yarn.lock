@@ -1358,9 +1358,10 @@
     shell-quote "^1.7.3"
     sudo-prompt "^9.0.0"
 
-"@react-native-community/datetimepicker@https://github.com/react-native-datetimepicker/datetimepicker.git":
+"@react-native-community/datetimepicker@^8.2.0":
   version "8.2.0"
-  resolved "https://github.com/react-native-datetimepicker/datetimepicker.git#80446e4d75ea95d0864e224d53c9845a3e368047"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-8.2.0.tgz#f62ac4fc12bd527fbbe93934e6c1cfbb7ba570f3"
+  integrity sha512-qrUPhiBvKGuG9Y+vOqsc56RPFcHa1SU2qbAMT0hfGkoFIj3FodE0VuPVrEa8fgy7kcD5NQmkZIKgHOBLV0+hWg==
   dependencies:
     invariant "^2.2.4"
 
@@ -4825,11 +4826,6 @@ react-native-config@^1.5.3:
   version "1.5.3"
   resolved "https://registry.npmmirror.com/react-native-config/-/react-native-config-1.5.3.tgz#1286c0c117adb367a948b31005430146e88c9c2e"
   integrity sha512-3D05Abgk5DfDw9w258EzXvX5AkU7eqj3u9H0H0L4gUga4nYg/zuupcrpGbpF4QeXBcJ84jjs6g8JaEP6VBT7Pg==
-
-react-native-date-picker@^5.0.7:
-  version "5.0.7"
-  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-5.0.7.tgz#24161d30c6dca8627afe1aa5a55a389421fdfba4"
-  integrity sha512-/RodyCZWjb+f3f4YHqKbWFYczGm+tNngwbVSB6MLGgt5Kl7LQXpv4QE6ybnHW+DM4LteTP8A6lj8LEkQ7+usLQ==
 
 react-native-gesture-handler@~2.20.2:
   version "2.20.2"
