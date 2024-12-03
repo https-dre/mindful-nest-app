@@ -1,7 +1,9 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { useImperativeHandle } from "react";
 
-export const CalendarEvent = ({ data, color = "blue" }) => {
+export const CalendarEvent = ({ data, color = "blue", longPress }) => {
+
     return (
         <View style={{ gap: 10, borderBottomWidth: 1, borderColor: "#ccd3e1", marginBottom: 10, paddingVertical: 10 }}>
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
@@ -11,7 +13,7 @@ export const CalendarEvent = ({ data, color = "blue" }) => {
                 </View>
                 <Icon name="ellipsis-horizontal-sharp" size={25} color="#8F9BB3" />
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onLongPress={() => longPress(data.id)}>
                 <Text style={{ fontSize: 18, fontFamily: "SpaceGroteskMedium" }}>{data.eventName}</Text>
             </TouchableOpacity>
             <Text style={{ color: "#8F9BB3" }}>{data.eventDescription}</Text>
