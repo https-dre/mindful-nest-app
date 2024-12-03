@@ -40,7 +40,6 @@ export const CalendarScreen = () => {
             setAllEvents((prev) => [...prev, eventInfo]);
         },
         editEvent: (eventInfo) => {
-            console.log('editEvent: ', eventInfo);
             setAllEvents((prevEvents) => {
             
                 const updatedEvents = prevEvents.map((event) =>
@@ -56,12 +55,10 @@ export const CalendarScreen = () => {
                         : event,
                 );
 
-                console.log('updatedEvents após atualização:', updatedEvents);
                 return updatedEvents;
             });
         },
         deleteEvent: (eventId) => {
-            console.log(eventId);
             setAllEvents(prevEvents => {
                 const events = prevEvents.filter(e => e.id !== eventId);
                 return events;
@@ -184,7 +181,7 @@ export const CalendarScreen = () => {
                     margin: 20,
                 }}
             >
-                Hoje
+                Marcadores
             </Text>
             <ScrollView
                 style={{
@@ -223,7 +220,6 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         maxHeight: 45,
-        marginLeft: 10,
     },
     button: {
         minWidth: 100,
