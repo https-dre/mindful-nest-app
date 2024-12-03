@@ -19,6 +19,9 @@ export const TasksTab = () => {
 	const [tasks, setTasks] = useState([]);
 	const [selected, setSelected] = useState("all");
 	const [visible, setVisible] = useState(false)
+	const [newTask, setNewTask] = useState(null)
+	const [lastRender, setLastRender] = useState(null)
+	
 
 	const renderAllTasks = () => {
 		const today = new Date().getDate();
@@ -41,7 +44,14 @@ export const TasksTab = () => {
 		);
 		setSelected("all");
 		setTasks(render);
+
+		setLastRender(()=>renderAllTasks)
 	};
+	
+	useEffect(()=>{
+		setLastRender(()=>renderAllTasks)
+	}, [])
+	
 
 	useEffect(() => {
 		const today = new Date().getDate();
@@ -88,6 +98,8 @@ export const TasksTab = () => {
 
 		setSelected("open");
 		setTasks(render);
+
+		setLastRender(()=>renderOpenTasks)
 	};
 
 	const renderFinishedTasks = () => {
@@ -112,6 +124,8 @@ export const TasksTab = () => {
 
 		setSelected("done");
 		setTasks(render);
+
+		setLastRender(()=>renderFinishedTasks)
 	};
 
 	const renderArchievedTasks = () => {
@@ -136,13 +150,29 @@ export const TasksTab = () => {
 
 		setSelected("archived");
 		setTasks(render);
+
+		setLastRender(()=>renderArchievedTasks)
 	}
+
+
+	useEffect(()=>{
+		if (newTask) {
+			projects.map((p)=>{
+				if (newTask.project.name === p.name) {
+					p.tasks.push(newTask.task)
+				}
+			})
+			lastRender()
+			console.error(newTask)
+		}
+	}, [newTask])
 
 	return (
 		<View style={styles.container}>
 			<BoxCreateTask
 				extVisible={visible}
 				onClose={()=>{setVisible(false)}}
+				taskHold={setNewTask}
 			/>
 			<View
 				style={{
