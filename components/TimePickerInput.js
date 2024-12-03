@@ -19,8 +19,8 @@ export const TimePickerInput = ({ onChange, value }) => {
         if (event.type === 'set') {
             setTime(selectedTime);
             onChange(selectedTime);
+            setShowPicker(false);
         }
-        setShowPicker(false);
     };
 
     return (

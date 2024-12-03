@@ -6,11 +6,11 @@ import {
     TouchableOpacity,
     TextInput,
     ScrollView,
+    Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Modalize } from 'react-native-modalize';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Category } from './Category';
 import { TimePickerInput } from './TimePickerInput';
 
 export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
@@ -40,6 +40,11 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
 
     const handleCreateEvent = () => {
         if (formData.eventName === '' || formData.eventName === null) {
+            Alert.alert("Atenção!", "Preencha o nome do Evento!");
+            return;
+        }
+        if (formData.eventStart > formData.eventEnd) {
+            Alert.alert("Atenção!", "O horário de início deve ser menor do que o horário de término!")
             return;
         }
         calendarRef.current?.addEvent(formData);
@@ -77,9 +82,9 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
     return (
         <Modalize
             ref={localModalizeRef}
-            snapPoint={600}
+            snapPoint={550}
             maxHeight={600}
-            panGestureEnabled={false}
+            panGestureEnabled={true}
             closeOnOverlayTap={true}
             handlePosition="top"
             dragToss={0.6}
@@ -87,8 +92,8 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
             onOpen={open}
             modalStyle={{
                 backgroundColor: 'white',
-                borderTopLeftRadius: 40,
-                borderTopRightRadius: 40,
+                borderTopLeftRadius: 20,
+                borderTopRightRadius: 20,
             }}
             handleStyle={{
                 // Barra de puxar
@@ -162,30 +167,6 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
                     </View>
                 </View>
 
-                {/* Categoria */}
-                <View style={{ marginTop: 20 }}>
-                    <Text style={[styles.modalTitle, { alignSelf: 'left' }]}>
-                        Categoria
-                    </Text>
-
-                    <ScrollView horizontal={true}>
-                        {/*  <Category /> */}
-                    </ScrollView>
-
-                    <TouchableOpacity
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginVertical: 10,
-                        }}
-                    >
-                        <Icon name="add" color="#007AFF" size={20} />
-                        <Text style={{ color: '#007AFF', fontWeight: 'bold' }}>
-                            Adicionar
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-
                 <TouchableOpacity
                     style={styles.createEventButton}
                     onPress={handleCreateEvent}
@@ -198,6 +179,21 @@ export const BottomSheetCreateEvent = ({ modalizeRef, calendarRef }) => {
                         }}
                     >
                         Criar Evento
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={[styles.createEventButton, {backgroundColor: "white"}]}
+                    onPress={localModalizeRef.current?.close}
+                >
+                    <Text
+                        style={{
+                            color: '#1D1F24',
+                            fontSize: 18,
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        Cancelar
                     </Text>
                 </TouchableOpacity>
             </View>

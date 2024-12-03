@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     TextInput,
     ScrollView,
+    Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Modalize } from 'react-native-modalize';
@@ -37,6 +38,14 @@ export const BottomSheetEditEvent = ({ modalizeRef, calendarRef }) => {
     }));
 
     const handleEditEvent = () => {
+        if (formData.eventName === '' || formData.eventName === null) {
+            Alert.alert("Atenção!", "Preencha o nome do Evento!");
+            return;
+        }
+        if (formData.eventStart > formData.eventEnd) {
+            Alert.alert("Atenção!", "O horário de início deve ser menor do que o horário de término!")
+            return;
+        }
         calendarRef.current?.editEvent(formData);
         localModalizeRef.current?.close();
     }
@@ -77,9 +86,9 @@ export const BottomSheetEditEvent = ({ modalizeRef, calendarRef }) => {
     return (
         <Modalize
             ref={localModalizeRef}
-            snapPoint={600}
+            snapPoint={550}
             maxHeight={600}
-            panGestureEnabled={false}
+            panGestureEnabled={true}
             closeOnOverlayTap={true}
             handlePosition="top"
             dragToss={0.6}
@@ -87,11 +96,10 @@ export const BottomSheetEditEvent = ({ modalizeRef, calendarRef }) => {
             onOpen={open}
             modalStyle={{
                 backgroundColor: 'white',
-                borderTopLeftRadius: 40,
-                borderTopRightRadius: 40,
+                borderTopLeftRadius: 20,
+                borderTopRightRadius: 20,
             }}
             handleStyle={{
-                // Barra de puxar
                 backgroundColor: '#ccc',
                 width: 80,
                 height: 6,
@@ -99,7 +107,7 @@ export const BottomSheetEditEvent = ({ modalizeRef, calendarRef }) => {
                 marginBottom: 25,
             }}
             overlayStyle={{
-                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Overlay escurecido
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
             }}
         >
             <View style={styles.modalContent}>
