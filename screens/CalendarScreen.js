@@ -81,7 +81,9 @@ export const CalendarScreen = () => {
     };
 
     useEffect(() => {
+        setMarkedDates({});
         const components = allEvents.map((eventInfo) => {
+            setMarkedDates((prev) => ({ ...prev, [eventInfo.eventDate]: { marked: true } }))
             const data = {
                 id: eventInfo.id,
                 eventName: eventInfo.eventName,
