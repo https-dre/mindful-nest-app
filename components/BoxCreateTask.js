@@ -95,11 +95,15 @@ export const BoxCreateTask = ({
     };
 
     const taskSave = () => {
-        if (!selectedProject) {
+        if (selectedProject === "default" || !selectedProject) {
             console.error("Projeto não selecionado");
             return;
         }
-
+        if (status === "default") {
+            console.error("Status não selecionado");
+            return;
+        }
+    
         const data = {
             task: {
                 name: name,
@@ -110,13 +114,13 @@ export const BoxCreateTask = ({
                     time.getHours(),
                     time.getMinutes()
                 ).toISOString(),
-                status: status,
+                status: parseInt(status, 10), // Converte para número
             },
             project: {
                 name: selectedProject,
             },
         };
-
+    
         taskHold(data);
     };
 
@@ -145,22 +149,22 @@ export const BoxCreateTask = ({
                         style={styles.projectsPicker}
                         onValueChange={(itemValue) => setSelectedProject(itemValue)}
                     >
-                        <Picker.Item label="Projeto" value={null} style={styles.pPickerItem} />
+                        <Picker.Item label="Projeto" value={"default"} style={styles.pPickerItem} />
                         {projectsAll}
                     </Picker>
                 </View>
                 <View style={[styles.pickerWraper, styles.border]}>
-                    <Picker
-                        selectedValue={status} // Liga o valor ao estado de status
-                        style={styles.projectsPicker}
-                        onValueChange={(itemValue) => setStatus(itemValue)} // Atualiza o estado de status
-                    >
-                        <Picker.Item label="Status" value={null} style={styles.pPickerItem} />
-                        <Picker.Item label="Aberto" value={0} style={styles.pPickerItem} />
-                        <Picker.Item label="Em andamento" value={1} style={styles.pPickerItem} />
-                        <Picker.Item label="Concluído" value={2} style={styles.pPickerItem} />
-                        <Picker.Item label="Arquivada" value={3} style={styles.pPickerItem} />
-                    </Picker>
+                <Picker
+                    selectedValue={status} // The state for status, which is numeric
+                    style={styles.projectsPicker}
+                    onValueChange={(itemValue) => setStatus(itemValue)} // Updates the state with string values
+                >
+                    <Picker.Item label="Status" value={"default"} style={styles.pPickerItem} />
+                    <Picker.Item label="Aberto" value="0" style={styles.pPickerItem} />
+                    <Picker.Item label="Em andamento" value="1" style={styles.pPickerItem} />
+                    <Picker.Item label="Concluído" value="2" style={styles.pPickerItem} />
+                    <Picker.Item label="Arquivada" value="3" style={styles.pPickerItem} />
+                </Picker>
                 </View>
                 <TouchableOpacity onPress={() => { setOpen(true) }} style={[styles.dateInput, styles.border]}>
                     <Text style={{ fontSize: 18 }}>{date.toLocaleDateString(
