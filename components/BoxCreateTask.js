@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { TouchableOpacity, Text, View, StyleSheet, Animated, TextInput } from "react-native";
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { projects } from "../exampledata";
 import DateTimePicker from '@react-native-community/datetimepicker';
-
 
 export const BoxCreateTask = ({
     extVisible,
@@ -12,26 +11,24 @@ export const BoxCreateTask = ({
     style,
     taskHold
 }) => {
-    const [visible, setVisible] = useState(extVisible)
-    const [heightFull, setHeightFull] = useState(false)
-    const [projectsAll, setProjectsAll] = useState(null)
-    const [selectedProject, setSelectedProject] = useState(null)
-    const [date, setDate] = useState(new Date())
-    const [time, setTime] = useState(new Date())
-    const [open, setOpen] = useState(false)
-    const [openTime, setOpenTime] = useState(false)
-    const [name, setName] = useState(null)
-    const [status, setStatus] = useState(0)
-    // const [hook, setHook] = useState(true)
+    const [visible, setVisible] = useState(extVisible);
+    const [heightFull, setHeightFull] = useState(false);
+    const [projectsAll, setProjectsAll] = useState(null);
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [date, setDate] = useState(new Date());
+    const [time, setTime] = useState(new Date());
+    const [open, setOpen] = useState(false);
+    const [openTime, setOpenTime] = useState(false);
+    const [name, setName] = useState(null);
+    const [status, setStatus] = useState(0);
 
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
     const fadeIn = () => {
-        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true,
+            toValue: 1,
+            duration: 200,
+            useNativeDriver: true,
         }).start();
     };
 
@@ -41,59 +38,60 @@ export const BoxCreateTask = ({
             duration: 200,
             useNativeDriver: true,
         }).start(() => {
-            setVisible(false)
-            if (onClose) onClose() // A função onClose é necessária
-        }); // Oculta após a animação de fade-out
+            setVisible(false);
+            if (onClose) onClose();
+        });
     };
 
-    const [height, setHeight] = useState(0)
+    const [height, setHeight] = useState(0);
 
     const handleLayout = (event) => {
-        const {height} = event.nativeEvent.layout
-
+        const { height } = event.nativeEvent.layout;
         setHeight(height);
-    }
+    };
+
+    const resetFields = () => {
+        setName(null);  // Limpa o TextInput
+        setSelectedProject(null); // Reseta o Picker de Projeto
+        setDate(new Date()); // Reseta a data
+        setTime(new Date()); // Reseta o tempo
+        setStatus(0); // Reseta o status
+    };
 
     useEffect(() => {
         if (extVisible) {
             setVisible(true);
-            setHeightFull(true) // Torna o componente visível
-            fadeIn(); // Executa fade-in
-            let projectsArray = []
-            
+            setHeightFull(true);
+            fadeIn();
+            let projectsArray = [];
+
             projects.map(p => {
                 projectsArray.push(
-                    <Picker.Item label={p.name} value={p.name} key={p.key} style={styles.pPickerItem}/>
-                )
-            })
+                    <Picker.Item label={p.name} value={p.name} key={p.key} style={styles.pPickerItem} />
+                );
+            });
 
-            setProjectsAll(projectsArray)
+            setProjectsAll(projectsArray);
         } else {
-            setHeightFull(false)
-            fadeOut(); // Executa fade-out e oculta
+            setHeightFull(false);
+            fadeOut();
         }
     }, [extVisible]);
 
-    // useEffect(() => {
-    //     if (!withButton && visible) {
-    //         setTimeout(() => setVisible(false), time * 1000);
-    //     }
-    // }, [visible, withButton]);
-
     const onChangeDate = (event, selectedDate) => {
-        if (event.type === "set") { // Verifica se foi confirmado
-          const currentDate = selectedDate || date;
-          setDate(currentDate);
+        if (event.type === "set") {
+            const currentDate = selectedDate || date;
+            setDate(currentDate);
         }
-        setOpen(false); // Fecha o seletor em qualquer caso
+        setOpen(false);
     };
 
     const onChangeTime = (event, selectedTime) => {
-        if (event.type === "set") { // Verifica se foi confirmado
-          const currentTime = selectedTime || time;
-          setTime(currentTime);
+        if (event.type === "set") {
+            const currentTime = selectedTime || time;
+            setTime(currentTime);
         }
-        setOpenTime(false); // Fecha o seletor em qualquer caso
+        setOpenTime(false);
     };
 
     const taskSave = () => {
@@ -101,7 +99,7 @@ export const BoxCreateTask = ({
             console.error("Projeto não selecionado");
             return;
         }
-    
+
         const data = {
             task: {
                 name: name,
@@ -115,60 +113,57 @@ export const BoxCreateTask = ({
                 status: status,
             },
             project: {
-                name: selectedProject
+                name: selectedProject,
             },
         };
-    
+
         taskHold(data);
     };
-    
-      
 
     return (
-        <Animated.View style={[{marginTop: (height/2)*(-1), opacity: fadeAnim, height: heightFull? "auto":0}, styles.mainView, styles.style]}>
+        <Animated.View style={[{ marginTop: (height / 2) * (-1), opacity: fadeAnim, height: heightFull ? "auto" : 0 }, styles.mainView, styles.style]}>
             <View style={[styles.headerView]}>
                 <TouchableOpacity
-                    onPress={()=>{
-                        setVisible(false)
-                        fadeOut()
+                    onPress={() => {
+                        setVisible(false);
+                        fadeOut();
                     }}
                 >
-                    <Icon size={20} name="x" color="red"/>
+                    <Icon size={20} name="x" color="red" />
                 </TouchableOpacity>
-                <Text style={styles.textTitle}>Adicionar task</Text>
             </View>
             <View style={[styles.contentView]}>
-                <Text style={{fontSize: 18, color: "blue"}}>Nome</Text>
-                <TextInput 
-                    style={{backgroundColor: "white", width: "80%", height: 40, borderRadius: 10, alignItems: "center", fontSize: 16}}
-                    onChangeText={(text)=>{setName(text)}}
+                <TextInput
+                    style={[{ backgroundColor: "white", width: "80%", height: 40, borderRadius: 10, alignItems: "center", fontSize: 16 }, styles.border]}
+                    onChangeText={(text) => { setName(text) }}
+                    value={name} // Vincula o valor ao estado
+                    placeholder="Nome da Task"
                 />
-                <Text style={{fontSize: 18, color: "blue"}}>Projeto</Text>
-                <View style={styles.pickerWraper}>
+                <View style={[styles.pickerWraper, styles.border]}>
                     <Picker
-                        selectedValue={selectedProject}
+                        selectedValue={selectedProject} // Liga o valor ao estado
                         style={styles.projectsPicker}
                         onValueChange={(itemValue) => setSelectedProject(itemValue)}
                     >
+                        <Picker.Item label="Projeto" value={null} style={styles.pPickerItem} />
                         {projectsAll}
                     </Picker>
                 </View>
-                <Text style={{fontSize: 18, color: "blue"}}>Status</Text>
-                <View style={styles.pickerWraper}>
+                <View style={[styles.pickerWraper, styles.border]}>
                     <Picker
-                        selectedValue={selectedProject}
+                        selectedValue={status} // Liga o valor ao estado de status
                         style={styles.projectsPicker}
-                        onValueChange={(itemValue) => setStatus(itemValue)}
+                        onValueChange={(itemValue) => setStatus(itemValue)} // Atualiza o estado de status
                     >
-                        <Picker.Item label="Aberto" value={0} style={styles.pPickerItem}/>
-                        <Picker.Item label="Em andamento" value={1} style={styles.pPickerItem}/>
-                        <Picker.Item label="Concluído" value={2} style={styles.pPickerItem}/>
-                        <Picker.Item label="Arquivada" value={3} style={styles.pPickerItem}/>
+                        <Picker.Item label="Status" value={null} style={styles.pPickerItem} />
+                        <Picker.Item label="Aberto" value={0} style={styles.pPickerItem} />
+                        <Picker.Item label="Em andamento" value={1} style={styles.pPickerItem} />
+                        <Picker.Item label="Concluído" value={2} style={styles.pPickerItem} />
+                        <Picker.Item label="Arquivada" value={3} style={styles.pPickerItem} />
                     </Picker>
                 </View>
-                <Text style={{fontSize: 18, color: "blue"}}>Data</Text>
-                <TouchableOpacity onPress={()=>{setOpen(true)}} style={styles.dateInput}>
-                    <Text style={{fontSize: 18}}>{date.toLocaleDateString(
+                <TouchableOpacity onPress={() => { setOpen(true) }} style={[styles.dateInput, styles.border]}>
+                    <Text style={{ fontSize: 18 }}>{date.toLocaleDateString(
                         "pt-BR",
                         {
                             day: "2-digit",
@@ -177,17 +172,14 @@ export const BoxCreateTask = ({
                         }
                     )}</Text>
                 </TouchableOpacity>
-                {
-                    open && <DateTimePicker
-                        value={date}
-                        mode="date"
-                        display="default"
-                        onChange={onChangeDate}
-                    />
-                }
-                <Text style={{fontSize: 18, color: "blue"}}>Horário</Text>
-                <TouchableOpacity onPress={()=>{setOpenTime(true)}} style={styles.dateInput}>
-                    <Text style={{fontSize: 18}}>{date.toLocaleTimeString(
+                {open && <DateTimePicker
+                    value={date}
+                    mode="date"
+                    display="default"
+                    onChange={onChangeDate}
+                />}
+                <TouchableOpacity onPress={() => { setOpenTime(true) }} style={[styles.dateInput, styles.border]}>
+                    <Text style={{ fontSize: 18 }}>{date.toLocaleTimeString(
                         "pt-BR",
                         {
                             hour: "2-digit",
@@ -197,32 +189,34 @@ export const BoxCreateTask = ({
                         }
                     )}</Text>
                 </TouchableOpacity>
-                {
-                    openTime && <DateTimePicker
-                        value={date}
-                        mode="time"
-                        display="default"
-                        onChange={onChangeTime}
-                    />
-                }
-
+                {openTime && <DateTimePicker
+                    value={date}
+                    mode="time"
+                    display="default"
+                    onChange={onChangeTime}
+                />}
             </View>
-            <TouchableOpacity 
-                style={[{display: "flex"}, styles.footerView]}
-                onPress={()=>{
-                    taskSave()
-                    setVisible(false)
-                    fadeOut()
+            <TouchableOpacity
+                style={[{ display: "flex" }, styles.footerView]}
+                onPress={() => {
+                    taskSave();
+                    resetFields(); // Reseta os campos
+                    setVisible(false);
+                    fadeOut();
                 }}
             >
-                <Text style={{fontWeight: "900", fontSize: 15}}>Adicionar Task</Text>
+                <Text style={{ fontWeight: "900", fontSize: 15, color: "white" }}>Adicionar Task</Text>
             </TouchableOpacity>
         </Animated.View>
-    )
-}
-
+    );
+};
 
 const styles = StyleSheet.create({
+    border: {
+        borderWidth: 2,
+        borderColor: "grey",
+        marginBottom: 15
+    },
     mainView: {
         position: "absolute",
         top: "20%",
@@ -230,7 +224,7 @@ const styles = StyleSheet.create({
         width: "80%",
         borderRadius: 10,
         zIndex: 3,
-        backgroundColor: "green"
+        backgroundColor: "white"
     },
     headerView: {
         width: "90%",
@@ -246,37 +240,40 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 5
     },
-    footerView : {
-        width: "100%",
+    footerView: {
+        width: "80%",
         marginTop: 15,
-        borderTopColor: "black",
-        borderTopWidth: 2,
         padding: 10,
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor: "black",
+        alignSelf: "center",
+        borderRadius: 10
     },
     textTitle: {
-        marginLeft: -80, 
+        marginLeft: -80,
         fontColor: "red"
     },
     pickerWraper: {
-        borderRadius: 20,
-        height: 50,
         width: "80%",
-        backgroundColor: "white"
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "white",
+        borderRadius: 10
     },
     projectsPicker: {
-        flex: 1
+        flex: 1,
+        width: "100%",
+        height: "100%"
     },
     pPickerItem: {
-        flex: 1
-
+        fontSize: 16
     },
     dateInput: {
-        height: 40,
-        backgroundColor: "white",
         width: "80%",
+        borderRadius: 8,
+        padding: 10,
+        backgroundColor: "white",
+        justifyContent: "center",
         alignItems: "center",
-        textAlign: "center",
-        borderRadius: 10
     }
-})
+});
