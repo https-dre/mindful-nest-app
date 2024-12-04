@@ -1,25 +1,32 @@
 import React, { useEffect, useState, useRef } from "react";
-import { TouchableOpacity, Text, View, StyleSheet, Animated, TextInput } from "react-native";
-import { Picker } from '@react-native-picker/picker';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import {
+    TouchableOpacity,
+    Text,
+    View,
+    StyleSheet,
+    Animated,
+    TextInput,
+    ScrollView
+} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { projects } from "../exampledata";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { HorizontalSelector } from "./HorizontalSelector";
 
 export const BoxCreateTask = ({
     extVisible,
     onClose,
     style,
-    taskHold
+    taskHold,
 }) => {
     const [visible, setVisible] = useState(extVisible);
     const [heightFull, setHeightFull] = useState(false);
-    const [projectsAll, setProjectsAll] = useState(null);
     const [selectedProject, setSelectedProject] = useState(null);
     const [date, setDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
     const [open, setOpen] = useState(false);
     const [openTime, setOpenTime] = useState(false);
-    const [name, setName] = useState(null);
+    const [name, setName] = useState("");
     const [status, setStatus] = useState(0);
 
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -43,70 +50,36 @@ export const BoxCreateTask = ({
         });
     };
 
-    const [height, setHeight] = useState(0);
-
-    const handleLayout = (event) => {
-        const { height } = event.nativeEvent.layout;
-        setHeight(height);
-    };
-
-    const resetFields = () => {
-        setName(null);  // Limpa o TextInput
-        setSelectedProject(null); // Reseta o Picker de Projeto
-        setDate(new Date()); // Reseta a data
-        setTime(new Date()); // Reseta o tempo
-        setStatus(0); // Reseta o status
-    };
-
     useEffect(() => {
         if (extVisible) {
             setVisible(true);
-            setHeightFull(true);
             fadeIn();
-            let projectsArray = [];
-
-            projects.map(p => {
-                projectsArray.push(
-                    <Picker.Item label={p.name} value={p.name} key={p.key} style={styles.pPickerItem} />
-                );
-            });
-
-            setProjectsAll(projectsArray);
         } else {
-            setHeightFull(false);
             fadeOut();
         }
     }, [extVisible]);
 
-    const onChangeDate = (event, selectedDate) => {
-        if (event.type === "set") {
-            const currentDate = selectedDate || date;
-            setDate(currentDate);
-        }
-        setOpen(false);
-    };
-
-    const onChangeTime = (event, selectedTime) => {
-        if (event.type === "set") {
-            const currentTime = selectedTime || time;
-            setTime(currentTime);
-        }
-        setOpenTime(false);
+    const resetFields = () => {
+        setName("");
+        setSelectedProject(null);
+        setDate(new Date());
+        setTime(new Date());
+        setStatus(0);
     };
 
     const taskSave = () => {
-        if (selectedProject === "default" || !selectedProject) {
-            console.error("Projeto não selecionado");
+        if (!selectedProject || selectedProject === "default") {
+            console.error("Selecione um projeto.");
             return;
         }
         if (status === "default") {
-            console.error("Status não selecionado");
+            console.error("Selecione um status.");
             return;
         }
-    
-        const data = {
+
+        const taskData = {
             task: {
-                name: name,
+                name,
                 date: new Date(
                     date.getFullYear(),
                     date.getMonth(),
@@ -114,170 +87,192 @@ export const BoxCreateTask = ({
                     time.getHours(),
                     time.getMinutes()
                 ).toISOString(),
-                status: parseInt(status, 10), // Converte para número
+                status: parseInt(status, 10),
             },
-            project: {
-                name: selectedProject,
-            },
+            project: { name: selectedProject },
         };
-    
-        taskHold(data);
+
+        taskHold(taskData);
+        resetFields();
+        fadeOut();
     };
 
+    const projectItems = projects.map(p => ({ label: p.name, value: p.name }));
+    const statusItems = [
+        { label: 'Aberto', value: '0' },
+        { label: 'Em andamento', value: '1' },
+        { label: 'Concluído', value: '2' },
+        { label: 'Arquivado', value: '3' },
+    ];
+
     return (
-        <Animated.View style={[{ marginTop: (height / 2) * (-1), opacity: fadeAnim, height: heightFull ? "auto" : 0 }, styles.mainView, styles.style]}>
-            <View style={[styles.headerView]}>
-                <TouchableOpacity
-                    onPress={() => {
-                        setVisible(false);
-                        fadeOut();
-                    }}
-                >
-                    <Icon size={20} name="x" color="red" />
+        <Animated.View
+            style={[
+                styles.mainView,
+                { opacity: fadeAnim, height: visible ? "100%" : 0 },
+                style,
+            ]}
+        >
+            <View style={styles.headerView}>
+                <TouchableOpacity onPress={() => fadeOut()}>
+                    <Icon name="close" size={20} color="red" />
                 </TouchableOpacity>
             </View>
-            <View style={[styles.contentView]}>
+            <View style={styles.contentView}>
+                
+                <View style={[styles.pickerWraper, styles.border]}>
+                    <Text style={styles.label}>PROJETO</Text>
+                    <HorizontalSelector
+                        items={projectItems}
+                        selectedValue={selectedProject}
+                        onValueChange={setSelectedProject}
+                    />
+                </View>
+                <View style={[styles.pickerWraper, styles.border]}>
+                    <Text style={styles.label}>STATUS</Text>
+                    <HorizontalSelector
+                        items={statusItems}
+                        selectedValue={status}
+                        onValueChange={setStatus}
+                    />
+                </View>
                 <TextInput
-                    style={[{ backgroundColor: "white", width: "80%", height: 40, borderRadius: 10, alignItems: "center", fontSize: 16 }, styles.border]}
-                    onChangeText={(text) => { setName(text) }}
-                    value={name} // Vincula o valor ao estado
-                    placeholder="Nome da Task"
+                    style={[styles.textInput]}
+                    placeholder="Nome da Task*"
+                    value={name}
+                    onChangeText={setName}
                 />
-                <View style={[styles.pickerWraper, styles.border]}>
-                    <Picker
-                        selectedValue={selectedProject} // Liga o valor ao estado
-                        style={styles.projectsPicker}
-                        onValueChange={(itemValue) => setSelectedProject(itemValue)}
-                    >
-                        <Picker.Item label="Projeto" value={"default"} style={styles.pPickerItem} />
-                        {projectsAll}
-                    </Picker>
-                </View>
-                <View style={[styles.pickerWraper, styles.border]}>
-                <Picker
-                    selectedValue={status} // The state for status, which is numeric
-                    style={styles.projectsPicker}
-                    onValueChange={(itemValue) => setStatus(itemValue)} // Updates the state with string values
+                <TextInput
+                    style={[styles.textInput]}
+                    placeholder="Descrição"
+                />
+                <TouchableOpacity
+                    style={[styles.textInput, {flexDirection: "row", alignItems: "center", justifyContent: "space-between"}]}
+                    onPress={() => setOpen(true)}
                 >
-                    <Picker.Item label="Status" value={"default"} style={styles.pPickerItem} />
-                    <Picker.Item label="Aberto" value="0" style={styles.pPickerItem} />
-                    <Picker.Item label="Em andamento" value="1" style={styles.pPickerItem} />
-                    <Picker.Item label="Concluído" value="2" style={styles.pPickerItem} />
-                    <Picker.Item label="Arquivada" value="3" style={styles.pPickerItem} />
-                </Picker>
-                </View>
-                <TouchableOpacity onPress={() => { setOpen(true) }} style={[styles.dateInput, styles.border]}>
-                    <Text style={{ fontSize: 18 }}>{date.toLocaleDateString(
-                        "pt-BR",
-                        {
+                    {!open && <Text>
+                        {date.toLocaleDateString("pt-BR", {
                             day: "2-digit",
                             month: "2-digit",
-                            year: "numeric"
+                            year: "numeric",
+                        })}
+                    </Text>}
+                    {open && (
+                    <DateTimePicker
+                        value={date}
+                        mode="date"
+                        display="default"
+                        onChange={(_, selectedDate) =>
+                            selectedDate && setDate(selectedDate)
                         }
-                    )}</Text>
+                    />
+                )}
+                    <Icon name="calendar-outline" size={20} color={"black"} />
                 </TouchableOpacity>
-                {open && <DateTimePicker
-                    value={date}
-                    mode="date"
-                    display="default"
-                    onChange={onChangeDate}
-                />}
-                <TouchableOpacity onPress={() => { setOpenTime(true) }} style={[styles.dateInput, styles.border]}>
-                    <Text style={{ fontSize: 18 }}>{date.toLocaleTimeString(
-                        "pt-BR",
-                        {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            dayPeriod: "short",
-                            hour12: true
-                        }
-                    )}</Text>
+                <TouchableOpacity
+                    style={styles.footerView}
+                    onPress={() => taskSave()}
+                >
+                    <Text style={{color: "white", fontWeight: "bold"}}>Criar</Text>
                 </TouchableOpacity>
-                {openTime && <DateTimePicker
-                    value={date}
-                    mode="time"
-                    display="default"
-                    onChange={onChangeTime}
-                />}
             </View>
-            <TouchableOpacity
-                style={[{ display: "flex" }, styles.footerView]}
-                onPress={() => {
-                    taskSave();
-                    resetFields(); // Reseta os campos
-                    setVisible(false);
-                    fadeOut();
-                }}
-            >
-                <Text style={{ fontWeight: "900", fontSize: 15, color: "white" }}>Adicionar Task</Text>
-            </TouchableOpacity>
+            
         </Animated.View>
     );
 };
 
 const styles = StyleSheet.create({
-    border: {
-        borderWidth: 2,
-        borderColor: "grey",
-        marginBottom: 15
+    textInput: {
+        width: '100%',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: "#8991A1",
+        padding: 15,
+        marginBottom: 10
     },
     mainView: {
-        position: "absolute",
-        top: "20%",
-        left: "15%",
-        width: "80%",
+        alignSelf: "center",
+        position: 'absolute',
+        width: '100%',
         borderRadius: 10,
         zIndex: 3,
-        backgroundColor: "white"
+        backgroundColor: 'white',
     },
     headerView: {
-        width: "90%",
-        justifyContent: "flex-start",
-        flexDirection: "row",
-        alignItems: "center",
+        width: '90%',
+        justifyContent: 'flex-start',
+        flexDirection: 'row',
+        alignItems: 'center',
         marginLeft: 10,
-        marginTop: 5
+        marginTop: 5,
     },
     contentView: {
         paddingHorizontal: 15,
-        width: "100%",
-        alignItems: "center",
-        marginTop: 5
+        width: '100%',
+        alignItems: 'center',
+        marginTop: 5,
+        justifyContent: "center",
+        height: "90%"
     },
     footerView: {
-        width: "80%",
+        width: '100%',
         marginTop: 15,
-        padding: 10,
-        alignItems: "center",
-        backgroundColor: "black",
-        alignSelf: "center",
-        borderRadius: 10
+        padding: 15,
+        alignItems: 'center',
+        backgroundColor: 'black',
+        alignSelf: 'center',
+        borderRadius: 100,
     },
     textTitle: {
         marginLeft: -80,
-        fontColor: "red"
+        fontColor: 'red',
     },
     pickerWraper: {
-        width: "80%",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "white",
-        borderRadius: 10
+        width: '100%',
+        backgroundColor: 'white',
+        borderRadius: 10,
+        overflow: "hidden",
     },
     projectsPicker: {
         flex: 1,
-        width: "100%",
-        height: "100%"
+        width: '100%',
+        alignSelf: "center"
     },
     pPickerItem: {
-        fontSize: 16
+        fontSize: 16,
     },
     dateInput: {
-        width: "80%",
+        width: '80%',
         borderRadius: 8,
         padding: 10,
-        backgroundColor: "white",
-        justifyContent: "center",
-        alignItems: "center",
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    scrollContainer: {
+        flexDirection: 'row',
+        paddingVertical: 8,
+    },
+    button: {
+        marginRight: 8,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        backgroundColor: '#e0e0e0',
+        borderRadius: 16,
+    },
+    selectedButton: {
+        backgroundColor: '#6200ee',
+    },
+    buttonText: {
+        color: '#000',
+        fontSize: 14,
+    },
+    selectedButtonText: {
+        color: '#fff',
+    },
+    label: {
+        fontSize: 16,
     }
 });
