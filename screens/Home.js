@@ -5,10 +5,13 @@ import {
 
 import Icon from "react-native-vector-icons/Ionicons";
 
+import { useNavigation } from "@react-navigation/native";
+
 import Carousel from "../components/Carousel";
 import { projects } from "../exampledata";
 
 export const Home = () => {
+  const navigation = useNavigation();
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
@@ -24,7 +27,7 @@ export const Home = () => {
           </View>
 
           <View style={{ flexDirection: "row", gap: 10, justifyContent: "flex-end" }}>
-            <TouchableOpacity style={styles.elipseButton}>
+            <TouchableOpacity style={styles.elipseButton} onPress={() => navigation.navigate("Notes")}>
               <Icon name="document-text-outline" color="#363538" size={20} />
             </TouchableOpacity>
 
