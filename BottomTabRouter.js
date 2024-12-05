@@ -7,6 +7,7 @@ import { Home } from "./screens/Home";
 import { Planner } from "./screens/Planner";
 import { CalendarScreen } from './screens/CalendarScreen';
 import { Community } from './screens/Community';
+import { UserConfig } from './screens/UserConfig';
 
 const Tab = createBottomTabNavigator();
 
@@ -56,7 +57,7 @@ export function BottomTabRouter() {
           <Tab.Screen name="Comunidade" component={Community} />
           <Tab.Screen name="Planner" component={Planner} />
           <Tab.Screen name="Calendar" component={CalendarScreen} />
-          <Tab.Screen name="Settings" component={Home} />
+          <Tab.Screen name="Settings" component={UserConfig} />
         </Tab.Navigator>
     );
 }

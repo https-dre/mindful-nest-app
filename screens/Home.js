@@ -4,6 +4,7 @@ import {
 } from "react-native";
 
 import Icon from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -54,7 +55,7 @@ export const Home = () => {
               <Text style={{ fontFamily: "SpaceGroteskMedium", fontSize: 18 }}>Projetos</Text>
               <Text>Você tem {projects.length} projetos em Progresso!</Text>
             </View>
-
+            
             <TouchableOpacity style={styles.blueButtom}>
               <Icon name="add" size={20} color="#007AFF" />
               <Text style={{ color: "#007AFF" }}>Criar</Text>
@@ -64,7 +65,46 @@ export const Home = () => {
 
         { /* Carousel */}
         <Carousel data={projects} />
+        <Text style={{fontSize: 20, marginLeft:"5%",}}>Recomendações</Text>
+        <Text style={{fontSize: 14, marginLeft:"5%", marginBottom:"5%", color: "#88929E"}}>As melhores recomendações para melhorar o seu dia</Text>
+        <View style={[styles.recomend,{ flexDirection: "row"}]}>
+            <Icon style={[styles.recomendbnt, {color: "#3C69DC",backgroundColor:"#BBDEFF"}]} name="musical-notes" size={24} color="black" />
+            <MaterialCommunityIcons style={[styles.recomendbnt, {color: "#E5B32C",backgroundColor:"#FAFFBB"}]} name="bookshelf" size={24} color="black" />
+            <MaterialCommunityIcons style={[styles.recomendbnt, {color: "#25D009",backgroundColor:"#C0FFBB",}]} name="tree-outline" size={24} color="black" />
+            <MaterialCommunityIcons style={[styles.recomendbnt, {color: "#94660E",backgroundColor:"#FFE4BB"}]} name="silverware-fork-knife" size={24} color="black" />
+            <Icon style={[styles.recomendbnt, {color: "#7821E8",backgroundColor:"#E5BBFF"}]} name="color-palette-outline" size={24} color="black" />
+            <MaterialCommunityIcons style={[styles.recomendbnt, {color: "#B03B3B",backgroundColor:"#FFBBBB"}]} name="play-box-outline" size={24} color="black" />
+            <Icon style={[styles.recomendbnt, {color: "#529EA1",backgroundColor:"#BCF0F6"}]} name="game-controller-outline" size={24} color="black" />
+            <Icon style={[styles.recomendbnt, {color: "#6C7F36",backgroundColor:"#F1FBB3"}]} name="basketball-outline" size={24} color="black" />
+        </View>
+        <View style={[styles.containerecomend, {backgroundColor: "#83C485", width: "90%", alignSelf: "center"}]}>
+          <View style={{flexDirection: "row", justifyContent: "space-between", alignSelf: "center", width: "100%"}}>
+            <Text style={{fontSize: 20, color: "white"}}>Jardim em casa</Text>
+            <TouchableOpacity>
+              <Text style={{fontSize: 15, color: "white"}}>Ver projeto</Text>
+            </TouchableOpacity>
+          </View>
 
+          <View style={{alignSelf: "center", width: "100%"}}>
+            <View style={{flexDirection: "row", justifyContent: "space-between", marginBottom: 5}}>
+              <Text style={{color: "#EBEBEB"}}>Progresso</Text>
+              <Text style={{color: "#EBEBEB"}}>60%</Text>
+            </View>
+
+            { /* Barra de Progresso */ }
+            <View style={{opacity: 0.21 ,backgroundColor: "black", alignSelf: "center", height: 1, width: "100%"}}>
+              <View style={{height: 1, width: "60%", backgroundColor: "white", opacity: 1}}/>
+            </View>
+          </View>
+
+          <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
+            <View style={{flexDirection: "row", alignItems: "center", gap: 5}}>
+              <Icon name="calendar" color="white" size={20} />
+              <Text style={{color: "white"}}>27/11</Text>
+            </View>
+          </View>
+        </View>
+        <TouchableOpacity style={styles.relacioBtn}>Ver relacionados</TouchableOpacity>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   )
@@ -108,5 +148,36 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: "row",
     alignItems: "center"
-  }
+  },
+  relacioBtn: 
+  {
+    alignSelf: "center",
+    alignItems: "center",
+    color: "#007AFF",
+    justifyContent: "center",
+    paddingLeft:"5%",
+    paddingRight:"5%",
+    paddingTop: "1%",
+    paddingBottom: "1%",
+    borderWidth: 1,
+    width: "95%",
+    borderColor: "#007AFF",
+    borderRadius: 60,
+  },
+  recomendbnt: {
+    padding: "1%",
+    marginLeft: "1.30%",
+    marginRight: "1.30%",
+    borderRadius: 45,
+  },
+  containerecomend: {
+    flex: 1,
+    backgroundColor: "white",
+    paddingTop: Platform.OS === "ios" ? 0 : 20,
+    borderRadius: 15,
+    padding: 15,
+    justifyContent: "space-around",
+    marginBottom: "5%",
+    marginTop: "5%",
+  },
 })
