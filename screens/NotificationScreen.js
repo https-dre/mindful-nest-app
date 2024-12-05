@@ -1,11 +1,13 @@
 import { Text, SafeAreaView, TouchableOpacity , StyleSheet, View } from 'react-native';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import Icon from '@expo/vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
-export const notificationScreen = () => {
+export const NotificationScreen = () => {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.tela}>
-      <TouchableOpacity style={styles.outbtn}>
-        <FontAwesome5 name="angle-left" size={24} color="black" />
+      <TouchableOpacity style={styles.outbtn} onPress={() => navigation.goBack()  }>
+        <Icon name="back" size={24} color="black" />
         <Text>  Notificações</Text>
       </TouchableOpacity>
       <View style={styles.item}>

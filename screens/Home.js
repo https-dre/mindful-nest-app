@@ -14,9 +14,8 @@ import { projects } from "../exampledata";
 export const Home = () => {
   const navigation = useNavigation();
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-
+        <ScrollView style={styles.container}>
         { /* header */}
         <View style={styles.header}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -32,7 +31,7 @@ export const Home = () => {
               <Icon name="document-text-outline" color="#363538" size={20} />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.elipseButton}>
+            <TouchableOpacity style={styles.elipseButton} onPress={() => navigation.navigate("NotificationScreen")}>
               <Icon name="notifications-outline" color="#363538" size={20} />
             </TouchableOpacity>
           </View>
@@ -77,6 +76,7 @@ export const Home = () => {
             <Icon style={[styles.recomendbnt, {color: "#529EA1",backgroundColor:"#BCF0F6"}]} name="game-controller-outline" size={24} color="black" />
             <Icon style={[styles.recomendbnt, {color: "#6C7F36",backgroundColor:"#F1FBB3"}]} name="basketball-outline" size={24} color="black" />
         </View>
+        { /* Card */ }
         <View style={[styles.containerecomend, {backgroundColor: "#83C485", width: "90%", alignSelf: "center"}]}>
           <View style={{flexDirection: "row", justifyContent: "space-between", alignSelf: "center", width: "100%"}}>
             <Text style={{fontSize: 20, color: "white"}}>Jardim em casa</Text>
@@ -84,7 +84,6 @@ export const Home = () => {
               <Text style={{fontSize: 15, color: "white"}}>Ver projeto</Text>
             </TouchableOpacity>
           </View>
-
           <View style={{alignSelf: "center", width: "100%"}}>
             <View style={{flexDirection: "row", justifyContent: "space-between", marginBottom: 5}}>
               <Text style={{color: "#EBEBEB"}}>Progresso</Text>
@@ -104,9 +103,13 @@ export const Home = () => {
             </View>
           </View>
         </View>
-        <TouchableOpacity style={styles.relacioBtn}>Ver relacionados</TouchableOpacity>
+
+        <TouchableOpacity style={styles.relacioBtn}>
+          <Text style={{fontWeight: "bold", color: "#007AFF"}}>Ver Relacionados</Text>
+        </TouchableOpacity>
+        </ScrollView>
       </SafeAreaView>
-    </TouchableWithoutFeedback>
+
   )
 }
 
@@ -151,15 +154,11 @@ const styles = StyleSheet.create({
   },
   relacioBtn: 
   {
-    alignSelf: "center",
     alignItems: "center",
-    color: "#007AFF",
     justifyContent: "center",
-    paddingLeft:"5%",
-    paddingRight:"5%",
-    paddingTop: "1%",
-    paddingBottom: "1%",
-    borderWidth: 1,
+    alignSelf: "center",
+    padding: 20,
+    borderWidth: 2,
     width: "95%",
     borderColor: "#007AFF",
     borderRadius: 60,
@@ -173,11 +172,13 @@ const styles = StyleSheet.create({
   containerecomend: {
     flex: 1,
     backgroundColor: "white",
-    paddingTop: Platform.OS === "ios" ? 0 : 20,
-    borderRadius: 15,
-    padding: 15,
+    padding: 20,
     justifyContent: "space-around",
     marginBottom: "5%",
-    marginTop: "5%",
+    marginTop: 10,
+    borderRadius: 10
   },
+  recomend: {
+    marginLeft: 20
+  }
 })
