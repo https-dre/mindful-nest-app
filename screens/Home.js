@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     paddingRight:"5%",
     paddingTop: "1%",
     paddingBottom: "1%",
-    borderWidth: "1px",
+    borderWidth: 1,
     width: "95%",
     borderColor: "#007AFF",
     borderRadius: 60,
