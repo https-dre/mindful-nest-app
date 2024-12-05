@@ -14,7 +14,7 @@ import { Login } from "./screens/Login/Login";
 import { BottomTabRouter } from "./BottomTabRouter"
 import { ViewProject } from './screens/ViewProject';
 import { Notes } from './screens/Notes';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { NotificationScreen } from "./screens/NotificationScreen";
 
 const Stack = createNativeStackNavigator()
 
@@ -29,7 +29,7 @@ const App = () => {
   
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={{flex: 1}}>
+
       <NavigationContainer style={{flex: 1}}>
           <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="BottomTab">
             <Stack.Screen name="LoginOrRegister" component={LoginOrRegister} />
@@ -41,9 +41,9 @@ const App = () => {
             <Stack.Screen name="BottomTab" component={BottomTabRouter} />
             <Stack.Screen name="ViewProject" component={ViewProject} />
             <Stack.Screen name="Notes" component={Notes} />
+            <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
           </Stack.Navigator>
       </NavigationContainer>
-    </SafeAreaView>
     </TouchableWithoutFeedback>
   )
 }
