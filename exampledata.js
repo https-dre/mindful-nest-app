@@ -3,21 +3,25 @@ export let tasks = [
         name: "Reunião com o Cliente",
         date: new Date().toISOString(),
         status: 0,
+        id: Math.random()
     },
     {
         name: "Hospedagem",
         date: new Date(2024, 11, 30, 10, 0, 0).toISOString(),
         status: 3,
+        id: Math.random()
     },
     {
         name: "Definição de Arquitetura",
         date: new Date().toISOString(),
         status: 2,
+        id: Math.random()
     },
     {
         name: "Entrega do App",
         date: new Date(2024, 11, 3, 23, 59, 0 ).toISOString(),
         status: 1,
+        id: Math.random()
     }
 ]
 
