@@ -29,7 +29,6 @@ const App = () => {
   
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-
       <NavigationContainer style={{flex: 1}}>
           <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="BottomTab">
             <Stack.Screen name="LoginOrRegister" component={LoginOrRegister} />
