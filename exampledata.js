@@ -76,3 +76,30 @@ export let usersData = [
         key: Math.random()
     }
 ];
+
+export const persistProject = (name, progress, deadline, users, backColor) => {
+    progress.push({
+        name,
+        progress,
+        deadline,
+        users,
+        backColor,
+        key: Math.random(),
+        tasks: []
+    })
+}
+
+export const persistTask = (name, date, status, projectId) => {
+    const taskId = Math.random()
+    tasks.push({
+        name,
+        date,
+        status,
+        id: taskId
+    });
+    projects.forEach(p => {
+        if (p.key === projectId) {
+            p.tasks.push(taskId);
+        }
+    });
+}
