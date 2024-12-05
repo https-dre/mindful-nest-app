@@ -5,23 +5,30 @@ import {
 	StyleSheet,
 	ScrollView,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { TaskComponent } from "../../components/TaskComponent";
 import { formatDate, GetStringFormatedDate } from "../../utilities";
 import { projects } from "../../exampledata";
+import { BottomSheetCreateTask } from "../../components/BottomSheetCreateTask";
+import { Modalize } from "react-native-modalize";
+import { BoxCreateTask } from "../../components/BoxCreateTask";
 
 export const TasksTab = () => {
 	const currentDateString = GetStringFormatedDate(new Date());
 	const [tasks, setTasks] = useState([]);
 	const [selected, setSelected] = useState("all");
+	const [visible, setVisible] = useState(false)
+	const [newTask, setNewTask] = useState(null)
+	const [lastRender, setLastRender] = useState(null)
+	
 
 	const renderAllTasks = () => {
-		const today = new Date().getDay();
+		const today = new Date().getDate();
 
 		const render = projects.flatMap((p) =>
 			p.tasks
-				.filter((t) => new Date(t.date).getDay() === today)
+				.filter((t) => new Date(t.date).getDate() === today)
 				.map((t) => {
 					const taskDate = formatDate(new Date(t.date));
 					return (
@@ -37,14 +44,21 @@ export const TasksTab = () => {
 		);
 		setSelected("all");
 		setTasks(render);
+
+		setLastRender(()=>renderAllTasks)
 	};
+	
+	useEffect(()=>{
+		setLastRender(()=>renderAllTasks)
+	}, [])
+	
 
 	useEffect(() => {
-		const today = new Date().getDay();
+		const today = new Date().getDate();
 
 		const render = projects.flatMap((p) =>
 			p.tasks
-				.filter((t) => new Date(t.date).getDay() === today)
+				.filter((t) => new Date(t.date).getDate() === today)
 				.map((t) => {
 					const taskDate = formatDate(new Date(t.date));
 					return (
@@ -63,11 +77,11 @@ export const TasksTab = () => {
 	}, projects);
 
 	const renderOpenTasks = () => {
-		const today = new Date().getDay();
+		const today = new Date().getDate();
 
 		const render = projects.flatMap((p) =>
 			p.tasks
-				.filter((t) => new Date(t.date).getDay() === today && t.status === 0)
+				.filter((t) => new Date(t.date).getDate() === today && t.status === 0)
 				.map((t) => {
 					const taskDate = formatDate(new Date(t.date));
 					return (
@@ -84,14 +98,16 @@ export const TasksTab = () => {
 
 		setSelected("open");
 		setTasks(render);
+
+		setLastRender(()=>renderOpenTasks)
 	};
 
 	const renderFinishedTasks = () => {
-		const today = new Date().getDay();
+		const today = new Date().getDate();
 
 		const render = projects.flatMap((p) =>
 			p.tasks
-				.filter((t) => new Date(t.date).getDay() === today && t.status === 2)
+				.filter((t) => new Date(t.date).getDate() === today && t.status === 2)
 				.map((t) => {
 					const taskDate = formatDate(new Date(t.date));
 					return (
@@ -108,10 +124,56 @@ export const TasksTab = () => {
 
 		setSelected("done");
 		setTasks(render);
+
+		setLastRender(()=>renderFinishedTasks)
 	};
+
+	const renderArchievedTasks = () => {
+		const today = new Date().getDate();
+
+		const render = projects.flatMap((p) =>
+			p.tasks
+				.filter((t) => new Date(t.date).getDate() === today && t.status === 3)
+				.map((t) => {
+					const taskDate = formatDate(new Date(t.date));
+					return (
+						<TaskComponent
+							taskname={t.name}
+							project={p.name}
+							status={t.status}
+							date={taskDate}
+							key={Math.random()}
+						/>
+					);
+				}),
+		);
+
+		setSelected("archived");
+		setTasks(render);
+
+		setLastRender(()=>renderArchievedTasks)
+	}
+
+
+	useEffect(()=>{
+		if (newTask) {
+			projects.map((p)=>{
+				if (newTask.project.name === p.name) {
+					p.tasks.push(newTask.task)
+				}
+			})
+			lastRender()
+			setNewTask(null)
+		}
+	}, [newTask])
 
 	return (
 		<View style={styles.container}>
+			<BoxCreateTask
+				extVisible={visible}
+				onClose={()=>{setVisible(false)}}
+				taskHold={setNewTask}
+			/>
 			<View
 				style={{
 					marginTop: 15,
@@ -131,7 +193,7 @@ export const TasksTab = () => {
 					</Text>
 					<Text style={{ color: "#5E6676" }}>{currentDateString}</Text>
 				</View>
-				<TouchableOpacity style={styles.addButton}>
+				<TouchableOpacity style={styles.addButton} onPress={()=>{setVisible(true)}}>
 					<Icon name="plus" size={17} color="#007AFF" />
 					<Text style={{ color: "#007AFF" }}>Adicionar</Text>
 				</TouchableOpacity>
@@ -156,13 +218,8 @@ export const TasksTab = () => {
 					</Text>
 				</TouchableOpacity>
 
-				<TouchableOpacity
-					onPress={() => setSelected("archived")}
-					style={{ padding: 5 }}
-				>
-					<Text
-						style={selected === "archived" ? styles.selectedText : styles.text}
-					>
+				<TouchableOpacity onPress={renderArchievedTasks} style={{ padding: 5 }}>
+					<Text style={selected === "archived" ? styles.selectedText : styles.text}>
 						Arquivadas
 					</Text>
 				</TouchableOpacity>

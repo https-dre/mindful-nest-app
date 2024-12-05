@@ -7,7 +7,7 @@ export let tasks = [
     {
         name: "Hospedagem",
         date: new Date(2024, 11, 30, 10, 0, 0).toISOString(),
-        status: 1,
+        status: 3,
     },
     {
         name: "Definição de Arquitetura",
