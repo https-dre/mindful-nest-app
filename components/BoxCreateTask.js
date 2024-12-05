@@ -6,7 +6,8 @@ import {
     StyleSheet,
     Animated,
     TextInput,
-    ScrollView
+    ScrollView,
+    Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { projects } from "../exampledata";
@@ -20,7 +21,6 @@ export const BoxCreateTask = ({
     taskHold,
 }) => {
     const [visible, setVisible] = useState(extVisible);
-    const [heightFull, setHeightFull] = useState(false);
     const [selectedProject, setSelectedProject] = useState(null);
     const [date, setDate] = useState(new Date());
     const [time, setTime] = useState(new Date());
@@ -97,6 +97,23 @@ export const BoxCreateTask = ({
         fadeOut();
     };
 
+    const onChangeDate = (event, selectedDate) => {
+        console.log(event);
+        if (event.type === "set") {
+            const currentDate = selectedDate || date;
+            setDate(currentDate);
+        }
+        setOpen(false);
+    };
+
+    const onChangeTime = (event, selectedTime) => {
+        if (event.type === "set") {
+            const currentTime = selectedTime || time;
+            setTime(currentTime);
+        }
+        setOpenTime(false);
+    };
+
     const projectItems = projects.map(p => ({ label: p.name, value: p.name }));
     const statusItems = [
         { label: 'Aberto', value: '0' },
@@ -157,18 +174,54 @@ export const BoxCreateTask = ({
                             year: "numeric",
                         })}
                     </Text>}
-                    {open && (
+                    {Platform.OS === "ios" && open && (
+                        <DateTimePicker
+                            value={date}
+                            mode="date"
+                            display="default"
+                            onChange={onChangeDate}
+                        />
+                )}
+                    <Icon name="calendar-outline" size={20} color={"black"} />
+                </TouchableOpacity>
+                {Platform.OS === "android" && open && (
                     <DateTimePicker
                         value={date}
                         mode="date"
                         display="default"
-                        onChange={(_, selectedDate) =>
-                            selectedDate && setDate(selectedDate)
-                        }
+                        onChange={onChangeDate}
                     />
                 )}
-                    <Icon name="calendar-outline" size={20} color={"black"} />
+                <TouchableOpacity
+                    style={[styles.textInput, {flexDirection: "row", alignItems: "center", justifyContent: "space-between"}]}
+                    onPress={() => setOpenTime(true)}
+                >
+                    {<Text>
+                        {time.toLocaleTimeString("pt-BR", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                        }
+                    )}
+                    </Text>}
+                    {Platform.OS === "ios" && openTime && (
+                    <DateTimePicker
+                        value={time}
+                        mode="time"
+                        display="default"
+                        onChange={onChangeTime}
+                    />
+                )}
+                    <Icon name="time-outline" size={20} color={"black"} />
                 </TouchableOpacity>
+                {Platform.OS === "android" && openTime && (
+                    <DateTimePicker
+                        value={time}
+                        mode="time"
+                        display="default"
+                        onChange={onChangeTime}
+                    />
+                )}
+                
                 <TouchableOpacity
                     style={styles.footerView}
                     onPress={() => taskSave()}
@@ -176,7 +229,6 @@ export const BoxCreateTask = ({
                     <Text style={{color: "white", fontWeight: "bold"}}>Criar</Text>
                 </TouchableOpacity>
             </View>
-            
         </Animated.View>
     );
 };
@@ -199,6 +251,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         zIndex: 3,
         backgroundColor: 'white',
+        overflow: "hidden"
     },
     headerView: {
         width: '90%',
