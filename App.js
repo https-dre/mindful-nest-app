@@ -3,6 +3,7 @@ import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from 'expo-font';
+import { TouchableWithoutFeedback, Keyboard } from 'react-native-web';
 
 import { LoginOrRegister } from "./screens/Login/LoginOrRegister";
 import { CreateAccount } from "./screens/Login/CreateAccount";
@@ -27,7 +28,8 @@ const App = () => {
   }
   
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={{flex: 1}}>
       <NavigationContainer style={{flex: 1}}>
           <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="BottomTab">
             <Stack.Screen name="LoginOrRegister" component={LoginOrRegister} />
@@ -42,6 +44,7 @@ const App = () => {
           </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
+    </TouchableWithoutFeedback>
   )
 }
 
