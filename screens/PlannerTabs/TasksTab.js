@@ -9,10 +9,31 @@ import React, { useState, useEffect, useRef } from "react";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { TaskComponent } from "../../components/TaskComponent";
 import { formatDate, GetStringFormatedDate } from "../../utilities";
-import { projects } from "../../exampledata";
+import  {projects as initialProjects} from "../../exampledata";
 import { BottomSheetCreateTask } from "../../components/BottomSheetCreateTask";
 import { Modalize } from "react-native-modalize";
 import { BoxCreateTask } from "../../components/BoxCreateTask";
+
+
+function setTaskStatus(projectName, taskname, value, setProjects) {
+	setProjects((prevProjects) =>
+		prevProjects.map((proj) => {
+			if (proj.name === projectName) {
+				return {
+					...proj,
+					tasks: proj.tasks.map((task) => {
+						if (task.name === taskname) {
+							return { ...task, status: value }; // Retorna uma nova tarefa com status atualizado
+						}
+						return task; // Retorna tarefas não modificadas
+					}),
+				};
+			}
+			return proj; // Retorna projetos não modificados
+		}),
+	);
+}
+
 
 export const TasksTab = () => {
 	const currentDateString = GetStringFormatedDate(new Date());
@@ -21,6 +42,7 @@ export const TasksTab = () => {
 	const [visible, setVisible] = useState(false)
 	const [newTask, setNewTask] = useState(null)
 	const [lastRender, setLastRender] = useState(null)
+	const [projects, setProjects] = useState(initialProjects)
 	
 
 	const renderAllTasks = () => {
@@ -38,6 +60,9 @@ export const TasksTab = () => {
 							status={t.status}
 							date={taskDate}
 							key={Math.random()}
+							setStatusFunc={(value) =>
+								setTaskStatus(p.name, t.name, value, setProjects)
+							}
 						/>
 					);
 				}),
@@ -68,13 +93,16 @@ export const TasksTab = () => {
 							status={t.status}
 							date={taskDate}
 							key={Math.random()}
+							setStatusFunc={(value) =>
+								setTaskStatus(p.name, t.name, value, setProjects)
+							}
 						/>
 					);
 				}),
 		);
 		setSelected("all");
 		setTasks(render);
-	}, projects);
+	}, [projects]);
 
 	const renderOpenTasks = () => {
 		const today = new Date().getDate();
@@ -91,6 +119,9 @@ export const TasksTab = () => {
 							status={t.status}
 							date={taskDate}
 							key={Math.random()}
+							setStatusFunc={(value) =>
+								setTaskStatus(p.name, t.name, value, setProjects)
+							}
 						/>
 					);
 				}),
@@ -117,6 +148,9 @@ export const TasksTab = () => {
 							status={t.status}
 							date={taskDate}
 							key={Math.random()}
+							setStatusFunc={(value) =>
+								setTaskStatus(p.name, t.name, value, setProjects)
+							}
 						/>
 					);
 				}),
@@ -143,6 +177,9 @@ export const TasksTab = () => {
 							status={t.status}
 							date={taskDate}
 							key={Math.random()}
+							setStatusFunc={(value) =>
+								setTaskStatus(p.name, t.name, value, setProjects)
+							}
 						/>
 					);
 				}),

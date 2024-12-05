@@ -1,78 +1,114 @@
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import IconFeather from "react-native-vector-icons/Feather";
+import { useState } from "react";
 
-function handleMarker(status) {
+function changeStatus(status, setStatus, setStatusFunc) {
+	if (status === 3) {
+		setStatus(0)
+		setStatusFunc(0)
+	} else {
+		setStatus(status+1)
+		setStatusFunc(status+1)
+	}
+	console.log(status)
+}
+
+function handleMarker(status, setStatus, setStatusFunc) {
 	switch (status) {
         case 0:
             return (
-                <View
-					key={Math.random()}
-					style={{
-						backgroundColor: "#e6e6e6",
-						padding: 10,
-						borderRadius: 100,
-                        borderColor: "#bebebe",
-						width: 20,
-						height: 20,
-                        borderWidth: 1
+				<TouchableOpacity
+					onPress={()=>{
+						changeStatus(status, setStatus, setStatusFunc)
 					}}
-				/>
+				>
+					<View
+						key={Math.random()}
+						style={{
+							backgroundColor: "#e6e6e6",
+							padding: 10,
+							borderRadius: 100,
+							borderColor: "#bebebe",
+							width: 20,
+							height: 20,
+							borderWidth: 1
+						}}
+					/>
+				</TouchableOpacity>
             )
 
 		case 1:
 			return (
-				<View
-					key={Math.random()}
-					style={{
-						backgroundColor: "#72aff6",
-						borderRadius: 100,
-						width: 30,
-						height: 30,
-                        alignItems: "center",
-                        justifyContent: "center"
+				<TouchableOpacity
+					onPress={()=>{
+						changeStatus(status, setStatus, setStatusFunc)
 					}}
 				>
-					<IconFeather
+					<View
 						key={Math.random()}
-						name="loader"
-						size={17}
-						color="#156fd7"
-					/>
-				</View>
+						style={{
+							backgroundColor: "#72aff6",
+							borderRadius: 100,
+							width: 30,
+							height: 30,
+							alignItems: "center",
+							justifyContent: "center"
+						}}
+					>
+						<IconFeather
+							key={Math.random()}
+							name="loader"
+							size={17}
+							color="#156fd7"
+						/>
+					</View>
+				</TouchableOpacity>
 			);
 		case 2:
 			return (
-				<Icon
-					key={Math.random()}
-					name="checkmark-circle"
-					size={25}
-					color="#007AFF"
-				/>
-			);
-		case 3:
-			return (
-				<View
-					key={Math.random()}
-					style={{
-						backgroundColor: "#72aff6",
-						borderRadius: 100,
-						width: 30,
-						height: 30,
-                        alignItems: "center",
-                        justifyContent: "center"
+				<TouchableOpacity
+					onPress={()=>{
+						changeStatus(status, setStatus, setStatusFunc)
 					}}
 				>
 					<Icon
 						key={Math.random()}
-						name="folder-outline"
-						size={17}
-						color="#156fd7"
+						name="checkmark-circle"
+						size={25}
+						color="#007AFF"
 					/>
-				</View>
+				</TouchableOpacity>
+			);
+		case 3:
+			return (
+				<TouchableOpacity
+					onPress={()=>{
+						changeStatus(status, setStatus, setStatusFunc)
+					}}
+				>
+					<View
+						key={Math.random()}
+						style={{
+							backgroundColor: "#72aff6",
+							borderRadius: 100,
+							width: 30,
+							height: 30,
+							alignItems: "center",
+							justifyContent: "center"
+						}}
+					>
+						<Icon
+							key={Math.random()}
+							name="folder-outline"
+							size={17}
+							color="#156fd7"
+						/>
+					</View>
+				</TouchableOpacity>
 			)
 		default:
-			console.log("Marker error in TaskComponent");
+			console.error("Marker error in TaskComponent");
 			return <View key={Math.random()} />;
 	}
 }
@@ -82,8 +118,10 @@ export const TaskComponent = ({
 	project = "Simple App Design",
 	date = "Hoje 10:00 PM - 11:45 PM",
 	status = 2,
+	setStatusFunc
 }) => {
-	let marker = handleMarker(status);
+	const [varStatus, setVarStatus] = useState(status)
+	let marker = handleMarker(varStatus, setVarStatus, setStatusFunc);
 
 	return (
 		<View style={styles.container}>
