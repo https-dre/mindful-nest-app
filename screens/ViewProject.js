@@ -12,7 +12,8 @@ import { useState, useEffect } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { GetStringFormatedDate, formatDate } from "../utilities";
 import { TaskComponent } from "../components/TaskComponent";
-import { projects, tasks } from "../exampledata";
+import { BoxCreateTask } from "../components/BoxCreateTask";
+import { projects, tasks, persistTask } from "../exampledata";
 
 const usersData = [
 	{
@@ -24,6 +25,7 @@ const usersData = [
 export const ViewProject = () => {
 	const route = useRoute();
 	const navigation = useNavigation();
+	const [visible, setVisible] = useState(false);
 	if (!route.params) {
 		return (
 			<View>
@@ -65,6 +67,7 @@ export const ViewProject = () => {
 	const [taskComponents, setTasks] = useState([]);
 	const [selected, setSelected] = useState("all");
 
+	
 	const findTaskIndexById = (taskId) => {
 		let i = null;
 		for (const index in tasks) {
@@ -86,6 +89,11 @@ export const ViewProject = () => {
 	}
 
 	let currentProjectIndex = findProjectIndexById(projectData.id);
+
+	const setNewTask = (data) => {
+		const { task, _ } = data;
+		persistTask(task.name, task.date, task.status, projects[currentProjectIndex].id);
+	}
 
 	const getTasksComponentArray = (tasksArray) => {
 		return tasksArray.map((t) => {
@@ -119,11 +127,12 @@ export const ViewProject = () => {
 		const arr = getTasksByProjectIndex(currentProjectIndex);
 		console.log(arr);
 		setTasks(getTasksComponentArray(arr));
+		setSelected("all");
 	}
 
 	const renderOpenTasks = () => {
 		const arr = getTasksByProjectIndex(currentProjectIndex)
-			.filter(t => t.status === 0 || t.statys === 1);
+			.filter(t => t.status === 0 || t.status === 1);
 		setTasks(getTasksComponentArray(arr));
 		setSelected("open");
 	}
@@ -145,6 +154,11 @@ export const ViewProject = () => {
 	return (
 		<SafeAreaView style={styles.container}>
 			{/* Banner Do Projeto */}
+			<BoxCreateTask
+				extVisible={visible}
+				onClose={()=>{setVisible(false)}}
+				taskHold={setNewTask}
+			/>
 			<View style={[styles.projectBanner, { backgroundColor: backColor }]}>
 				<Image
 					source={require("../assets/lines-effect.png")}
@@ -270,7 +284,7 @@ export const ViewProject = () => {
 						</Text>
 						<Text style={{ color: "#5E6676" }}>{currentDateString}</Text>
 					</View>
-					<TouchableOpacity style={styles.addButton}>
+					<TouchableOpacity style={styles.addButton} onPress={() => setVisible(true)}>
 						<Icon name="add" size={17} color="#007AFF" />
 						<Text style={{ color: "#007AFF", fontWeight: "bold" }}>
 							Adicionar
