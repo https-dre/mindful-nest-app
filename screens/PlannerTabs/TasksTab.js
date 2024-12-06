@@ -9,7 +9,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { TaskComponent } from "../../components/TaskComponent";
 import { formatDate, GetStringFormatedDate } from "../../utilities";
-import  { projects as initialProjects, tasks as initialTasks } from "../../exampledata";
+import  { projects as initialProjects, tasks as initialTasks, persistTask } from "../../exampledata";
 import { BoxCreateTask } from "../../components/BoxCreateTask";
 
 export const TasksTab = () => {
@@ -17,9 +17,15 @@ export const TasksTab = () => {
 	const [tasks, setTasks] = useState([]);
 	const [selected, setSelected] = useState("all");
 	const [visible, setVisible] = useState(false)
-	const [newTask, setNewTask] = useState(null)
 	const [lastRender, setLastRender] = useState(null)
 	const [projects, setProjects] = useState(initialProjects)
+
+	const setNewTask = (data) => {
+		const { task, project } = data;
+		const projectIndex = initialProjects.findIndex(p => p.name === project.name);
+		console.log("SET NEW TASK: ", data)
+		persistTask(task.name, task.date, task.status, initialProjects[projectIndex].id);
+	}
 
 	const renderAllTasks = () => {
 		const today = new Date().getDate();
@@ -85,11 +91,7 @@ export const TasksTab = () => {
 		setLastRender(() => renderOpenTasks); 
 	}
 
-	useEffect(() => {
-		renderAllTasks();
-		setSelected("all");
-		setLastRender(() => renderAllTasks)
-	}, [])
+	
 
 	const renderFinishedTasks = () => {
 		const today = new Date().getDate();
@@ -152,6 +154,12 @@ export const TasksTab = () => {
 		setSelected("archived"); 
 		setLastRender(() => renderAllTasks); 
 	}
+
+	useEffect(() => {
+		renderAllTasks();
+		setSelected("all");
+		setLastRender(() => renderAllTasks)
+	}, [initialProjects, initialTasks])
 
 	return (
 		<View style={styles.container}>
