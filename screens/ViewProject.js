@@ -42,7 +42,7 @@ export const ViewProject = () => {
 		);
 	}
 
-	const { name, progress, deadline, backColor, users, tasks } = projectData;
+	const { name, progress, deadline, backColor, users } = projectData;
 
 	let participantesImage = [];
 
@@ -65,27 +65,29 @@ export const ViewProject = () => {
 	const [taskComponents, setTasks] = useState([]);
 	const [selected, setSelected] = useState("all");
 
-	const currentTasks = projects.filter((p) => p.key === projectData.key)[0]
-		.tasks;
+	const findTaskIndexById = (taskId) => {
+		let i = null;
+		for (const index in tasks) {
+			if (taskId === tasks[index].id) {
+				i = index;
+			}
+		}
+		return i;
+	}
 
-	useEffect(() => {
-		const render = currentTasks.map((t) => {
-			const taskDate = formatDate(new Date(t.date));
-			return (
-				<TaskComponent
-					taskname={t.name}
-					project={projectData.name}
-					status={t.status}
-					date={taskDate}
-					key={Math.random()}
-				/>
-			);
-		});
-		setSelected("all");
-		setTasks(render);
-	}, [currentTasks, projectData]);
+	const findProjectIndexById = (projectId) => {
+		let i = null;
+		for (const index in projects) {
+			if (projectId === projects[index].id) {
+				i = index;
+			}
+		}
+		return i;
+	}
 
-	const renderTasks = (tasksArray) => {
+	let currentProjectIndex = findProjectIndexById(projectData.id);
+
+	const getTasksComponentArray = (tasksArray) => {
 		return tasksArray.map((t) => {
 			const taskDate = formatDate(new Date(t.date));
 			return (
@@ -95,42 +97,51 @@ export const ViewProject = () => {
 					status={t.status}
 					date={taskDate}
 					key={Math.random()}
+					id={t.id}
 				/>
 			);
 		});
 	};
 
+	const getTasksByProjectIndex = (p_index) => {
+		return projects[p_index].tasks.map(id => {
+			return tasks[findTaskIndexById(id)];
+		});
+	}
+
+	useEffect(() => {
+		const arr = getTasksByProjectIndex(currentProjectIndex);
+		console.log(arr);
+		setTasks(getTasksComponentArray(arr));
+	}, [projects, tasks]);
+
 	const renderAllTasks = () => {
-		const render = renderTasks(currentTasks);
-		setSelected("all");
-		setTasks(render);
-	};
+		const arr = getTasksByProjectIndex(currentProjectIndex);
+		console.log(arr);
+		setTasks(getTasksComponentArray(arr));
+	}
 
 	const renderOpenTasks = () => {
-		const openTasks = currentTasks.filter((t) => t.status === 0);
-		if (openTasks.length === 0) {
-			setSelected("open");
-			setTasks(<Text>Nenhuma Task</Text>);
-			return;
-		}
-		const render = renderTasks(openTasks);
-
+		const arr = getTasksByProjectIndex(currentProjectIndex)
+			.filter(t => t.status === 0 || t.statys === 1);
+		setTasks(getTasksComponentArray(arr));
 		setSelected("open");
-		setTasks(render);
-	};
+	}
 
 	const renderFinishedTasks = () => {
-		const finishedTasks = currentTasks.filter((t) => t.status === 2);
-		if (finishedTasks.length === 0) {
-			setSelected("done");
-			setTasks(<Text>Nenhuma Task</Text>);
-			return;
-		}
-		const render = renderTasks(finishedTasks);
+		const arr = getTasksByProjectIndex(currentProjectIndex)
+			.filter(t => t.status === 2);
+		setTasks(getTasksComponentArray(arr));
 		setSelected("done");
-		setTasks(render);
-	};
+	}
 
+	const renderArchivedTasks = () => {
+		const arr = getTasksByProjectIndex(currentProjectIndex)
+			.filter(t => t.status === 3);
+		setTasks(getTasksComponentArray(arr));
+		setSelected("archived");
+	}
+	
 	return (
 		<SafeAreaView style={styles.container}>
 			{/* Banner Do Projeto */}
@@ -296,7 +307,7 @@ export const ViewProject = () => {
 					</TouchableOpacity>
 
 					<TouchableOpacity
-						onPress={() => setSelected("archived")}
+						onPress={renderArchivedTasks}
 						style={{ padding: 5 }}
 					>
 						<Text
