@@ -2,25 +2,35 @@ import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import IconFeather from "react-native-vector-icons/Feather";
 import { useState } from "react";
+import { tasks } from "../exampledata";
 
-function changeStatus(status, setStatus, setStatusFunc) {
-	if (status === 3) {
-		setStatus(0)
-		setStatusFunc(0)
-	} else {
-		setStatus(status+1)
-		setStatusFunc(status+1)
+const changeStatus = (taskId, setStatus) => {
+	let taskIndex = null;
+	for (const index in tasks) {
+		if (taskId === tasks[index].id) 
+		{
+			taskIndex = index;
+			break;
+		}
 	}
-	console.log(status)
+	const { status } = tasks[taskIndex];
+	if (status === 3) {
+		tasks[taskIndex].status = 0;
+		setStatus(0)
+	} else {
+		tasks[taskIndex].status += 1;
+		setStatus(status + 1);
+	}
+	console.log(tasks[taskIndex]);
 }
 
-function handleMarker(status, setStatus, setStatusFunc) {
+function handleMarker(status, setStatus, taskId) {
 	switch (status) {
         case 0:
             return (
 				<TouchableOpacity
 					onPress={()=>{
-						changeStatus(status, setStatus, setStatusFunc)
+						changeStatus(taskId, setStatus)
 					}}
 				>
 					<View
@@ -42,7 +52,7 @@ function handleMarker(status, setStatus, setStatusFunc) {
 			return (
 				<TouchableOpacity
 					onPress={()=>{
-						changeStatus(status, setStatus, setStatusFunc)
+						changeStatus(taskId, setStatus)
 					}}
 				>
 					<View
@@ -69,7 +79,7 @@ function handleMarker(status, setStatus, setStatusFunc) {
 			return (
 				<TouchableOpacity
 					onPress={()=>{
-						changeStatus(status, setStatus, setStatusFunc)
+						changeStatus(taskId, setStatus)
 					}}
 				>
 					<Icon
@@ -84,7 +94,7 @@ function handleMarker(status, setStatus, setStatusFunc) {
 			return (
 				<TouchableOpacity
 					onPress={()=>{
-						changeStatus(status, setStatus, setStatusFunc)
+						changeStatus(taskId, setStatus)
 					}}
 				>
 					<View
@@ -118,10 +128,10 @@ export const TaskComponent = ({
 	project = "Simple App Design",
 	date = "Hoje 10:00 PM - 11:45 PM",
 	status = 2,
-	setStatusFunc
+	id = 0
 }) => {
 	const [varStatus, setVarStatus] = useState(status)
-	let marker = handleMarker(varStatus, setVarStatus, setStatusFunc);
+	let marker = handleMarker(varStatus, setVarStatus, id);
 
 	return (
 		<View style={styles.container}>
