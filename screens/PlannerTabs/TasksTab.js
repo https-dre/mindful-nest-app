@@ -9,31 +9,8 @@ import React, { useState, useEffect, useRef } from "react";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { TaskComponent } from "../../components/TaskComponent";
 import { formatDate, GetStringFormatedDate } from "../../utilities";
-import  {projects as initialProjects} from "../../exampledata";
-import { BottomSheetCreateTask } from "../../components/BottomSheetCreateTask";
-import { Modalize } from "react-native-modalize";
+import  { projects as initialProjects, tasks as initialTasks } from "../../exampledata";
 import { BoxCreateTask } from "../../components/BoxCreateTask";
-
-
-function setTaskStatus(projectName, taskname, value, setProjects) {
-	setProjects((prevProjects) =>
-		prevProjects.map((proj) => {
-			if (proj.name === projectName) {
-				return {
-					...proj,
-					tasks: proj.tasks.map((task) => {
-						if (task.name === taskname) {
-							return { ...task, status: value }; // Retorna uma nova tarefa com status atualizado
-						}
-						return task; // Retorna tarefas não modificadas
-					}),
-				};
-			}
-			return proj; // Retorna projetos não modificados
-		}),
-	);
-}
-
 
 export const TasksTab = () => {
 	const currentDateString = GetStringFormatedDate(new Date());
@@ -43,166 +20,138 @@ export const TasksTab = () => {
 	const [newTask, setNewTask] = useState(null)
 	const [lastRender, setLastRender] = useState(null)
 	const [projects, setProjects] = useState(initialProjects)
-	
 
 	const renderAllTasks = () => {
 		const today = new Date().getDate();
+		const render = initialProjects.flatMap((project) => {
+			console.log("PROJECT: ", project)
+			const tasks_array = project.tasks.map(t_id => {
+				return initialTasks.find(t => t.id === t_id)
+			})
 
-		const render = projects.flatMap((p) =>
-			p.tasks
-				.filter((t) => new Date(t.date).getDate() === today)
-				.map((t) => {
-					const taskDate = formatDate(new Date(t.date));
+			return tasks_array
+				.filter(t => new Date(t.date).getDate() === today).map((task) => {
+					if (!task) return null;
+		
+					const taskDate = formatDate(new Date(task.date));
 					return (
 						<TaskComponent
-							taskname={t.name}
-							project={p.name}
-							status={t.status}
+							taskname={task.name}
+							project={project.name}
+							status={task.status}
 							date={taskDate}
-							key={Math.random()}
-							setStatusFunc={(value) =>
-								setTaskStatus(p.name, t.name, value, setProjects)
-							}
+							key={`${project.id}-${task.id}`}
+							id={task.id}
 						/>
 					);
-				}),
-		);
-		setSelected("all");
-		setTasks(render);
-
-		setLastRender(()=>renderAllTasks)
+			});
+		});
+	
+		setTasks(render); 
+		setSelected("all"); 
+		setLastRender(() => renderAllTasks); 
 	};
-	
-	useEffect(()=>{
-		setLastRender(()=>renderAllTasks)
-	}, [])
-	
-
-	useEffect(() => {
-		const today = new Date().getDate();
-
-		const render = projects.flatMap((p) =>
-			p.tasks
-				.filter((t) => new Date(t.date).getDate() === today)
-				.map((t) => {
-					const taskDate = formatDate(new Date(t.date));
-					return (
-						<TaskComponent
-							taskname={t.name}
-							project={p.name}
-							status={t.status}
-							date={taskDate}
-							key={Math.random()}
-							setStatusFunc={(value) =>
-								setTaskStatus(p.name, t.name, value, setProjects)
-							}
-						/>
-					);
-				}),
-		);
-		setSelected("all");
-		setTasks(render);
-	}, [projects]);
 
 	const renderOpenTasks = () => {
 		const today = new Date().getDate();
+		const render = initialProjects.flatMap((project) => {
+			console.log("PROJECT: ", project)
+			const tasks_array = project.tasks.map(t_id => {
+				return initialTasks.find(t => t.id === t_id)
+			})
 
-		const render = projects.flatMap((p) =>
-			p.tasks
-				.filter((t) => new Date(t.date).getDate() === today && t.status === 0)
-				.map((t) => {
-					const taskDate = formatDate(new Date(t.date));
+			return tasks_array
+				.filter(t => new Date(t.date).getDate() === today)
+				.filter(t => t.status === 0 || t.status === 1)
+				.map((task) => {
+					if (!task) return null;
+		
+					const taskDate = formatDate(new Date(task.date));
 					return (
 						<TaskComponent
-							taskname={t.name}
-							project={p.name}
-							status={t.status}
+							taskname={task.name}
+							project={project.name}
+							status={task.status}
 							date={taskDate}
-							key={Math.random()}
-							setStatusFunc={(value) =>
-								setTaskStatus(p.name, t.name, value, setProjects)
-							}
+							key={`${project.id}-${task.id}`}
+							id={task.id}
 						/>
 					);
-				}),
-		);
+			});
+		});
+	
+		setTasks(render); 
+		setSelected("open"); 
+		setLastRender(() => renderOpenTasks); 
+	}
 
-		setSelected("open");
-		setTasks(render);
-
-		setLastRender(()=>renderOpenTasks)
-	};
+	useEffect(() => {
+		renderAllTasks();
+		setSelected("all");
+		setLastRender(() => renderAllTasks)
+	}, [])
 
 	const renderFinishedTasks = () => {
 		const today = new Date().getDate();
+		const render = initialProjects.flatMap((project) => {
+			console.log("PROJECT: ", project)
+			const tasks_array = project.tasks.map(t_id => {
+				return initialTasks.find(t => t.id === t_id)
+			})
 
-		const render = projects.flatMap((p) =>
-			p.tasks
-				.filter((t) => new Date(t.date).getDate() === today && t.status === 2)
-				.map((t) => {
-					const taskDate = formatDate(new Date(t.date));
+			return tasks_array
+				.filter(t => new Date(t.date).getDate() === today && t.status === 2).map((task) => {
+					if (!task) return null;
+		
+					const taskDate = formatDate(new Date(task.date));
 					return (
 						<TaskComponent
-							taskname={t.name}
-							project={p.name}
-							status={t.status}
+							taskname={task.name}
+							project={project.name}
+							status={task.status}
 							date={taskDate}
-							key={Math.random()}
-							setStatusFunc={(value) =>
-								setTaskStatus(p.name, t.name, value, setProjects)
-							}
+							key={`${project.id}-${task.id}`}
+							id={task.id}
 						/>
 					);
-				}),
-		);
-
-		setSelected("done");
-		setTasks(render);
-
-		setLastRender(()=>renderFinishedTasks)
-	};
-
-	const renderArchievedTasks = () => {
-		const today = new Date().getDate();
-
-		const render = projects.flatMap((p) =>
-			p.tasks
-				.filter((t) => new Date(t.date).getDate() === today && t.status === 3)
-				.map((t) => {
-					const taskDate = formatDate(new Date(t.date));
-					return (
-						<TaskComponent
-							taskname={t.name}
-							project={p.name}
-							status={t.status}
-							date={taskDate}
-							key={Math.random()}
-							setStatusFunc={(value) =>
-								setTaskStatus(p.name, t.name, value, setProjects)
-							}
-						/>
-					);
-				}),
-		);
-
-		setSelected("archived");
-		setTasks(render);
-
-		setLastRender(()=>renderArchievedTasks)
+			});
+		});
+	
+		setTasks(render); 
+		setSelected("done"); 
+		setLastRender(() => renderFinishedTasks); 
 	}
 
-
-	useEffect(()=>{
-		if (newTask) {
-			projects.map((p)=>{
-				if (newTask.project.name === p.name) {
-					p.tasks.push(newTask.task)
-				}
+	const renderArchivedTasks = () => {
+		const today = new Date().getDate();
+		const render = initialProjects.flatMap((project) => {
+			console.log("PROJECT: ", project)
+			const tasks_array = project.tasks.map(t_id => {
+				return initialTasks.find(t => t.id === t_id)
 			})
-			lastRender()
-			setNewTask(null)
-		}
-	}, [newTask])
+
+			return tasks_array
+				.filter(t => new Date(t.date).getDate() === today && t.status === 3).map((task) => {
+					if (!task) return null;
+		
+					const taskDate = formatDate(new Date(task.date));
+					return (
+						<TaskComponent
+							taskname={task.name}
+							project={project.name}
+							status={task.status}
+							date={taskDate}
+							key={`${project.id}-${task.id}`}
+							id={task.id}
+						/>
+					);
+			});
+		});
+	
+		setTasks(render); 
+		setSelected("archived"); 
+		setLastRender(() => renderAllTasks); 
+	}
 
 	return (
 		<View style={styles.container}>
@@ -255,7 +204,7 @@ export const TasksTab = () => {
 					</Text>
 				</TouchableOpacity>
 
-				<TouchableOpacity onPress={renderArchievedTasks} style={{ padding: 5 }}>
+				<TouchableOpacity onPress={renderArchivedTasks} style={{ padding: 5 }}>
 					<Text style={selected === "archived" ? styles.selectedText : styles.text}>
 						Arquivadas
 					</Text>
