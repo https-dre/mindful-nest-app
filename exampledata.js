@@ -72,11 +72,8 @@ export const persistTask = (name, date, status, projectId) => {
         status,
         id: taskId
     });
-    projects.forEach(p => {
-        if (p.id === projectId) {
-            p.tasks.push(taskId);
-        }
-    });
+    const pIndex = projects.findIndex(p => p.id === projectId);
+    projects[pIndex].tasks.push(taskId);
 }
 
 export let tasksToPersist = [
