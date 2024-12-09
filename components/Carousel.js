@@ -24,32 +24,34 @@ const MyCarousel = ({data}) => {
                 ref={flatListRef} // Defina a referência para o FlatList
                 data={data}
                 renderItem={({ item }) => {
-                    if(item.progress !== "100%") {
+                    if (item.progress !== '100%') {
                         return (
                             <View style={styles.slide}>
-                                <Project 
+                                <Project
                                     projectData={item}
                                 />
                             </View>
-                        )
-                    }   
+                        );
+                    }
                 }}
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
-                keyExtractor={item => item.key}
+                keyExtractor={((item) => item.id)}
                 onViewableItemsChanged={onViewRef.current}
                 viewabilityConfig={viewConfigRef.current}
                 snapToAlignment="center"
                 decelerationRate="fast"
                 bounces={false} // Desativa o efeito de bounce
-                
             />
             <View style={styles.pagination}>
                 {data.map((_, index) => (
                     <View
-                        key={index}
-                        style={[styles.dot, { opacity: index === currentIndex ? 1 : 0.3 }]}
+                        key={Math.random()}
+                        style={[
+                            styles.dot,
+                            { opacity: index === currentIndex ? 1 : 0.3 },
+                        ]}
                     />
                 ))}
             </View>
