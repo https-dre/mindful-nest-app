@@ -9,11 +9,11 @@ import {
 import Carousel from "../../components/Carousel";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { SquareProject } from "../../components/SquareProject";
-import { projects } from "../../exampledata";
-
+import { useAppState } from "../../AppStateContext";
 
 export const ProjectsTab = () => {
 	let projectComponents = [];
+	const { projects } = useAppState();
 
 	projects.map(p => {
 		projectComponents.push(<SquareProject data={p} key={Math.random()} size={170} />)

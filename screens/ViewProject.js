@@ -14,6 +14,7 @@ import { GetStringFormatedDate, formatDate } from "../utilities";
 import { TaskComponent } from "../components/TaskComponent";
 import { BoxCreateTask } from "../components/BoxCreateTask";
 import { projects, tasks, persistTask } from "../exampledata";
+import { useAppState } from "../AppStateContext";
 
 const usersData = [
 	{
@@ -26,6 +27,8 @@ export const ViewProject = () => {
 	const route = useRoute();
 	const navigation = useNavigation();
 	const [visible, setVisible] = useState(false);
+	const { projects, tasks, setTasks, setProjects } = useAppState();
+
 	if (!route.params) {
 		return (
 			<View>
@@ -64,7 +67,7 @@ export const ViewProject = () => {
 	const currentDateString = GetStringFormatedDate(new Date());
 	/* Toda a renderização de Tasks */
 
-	const [taskComponents, setTasks] = useState([]);
+	const [taskComponents, setTasksComponents] = useState([]);
 	const [selected, setSelected] = useState("all");
 
 	
@@ -91,8 +94,13 @@ export const ViewProject = () => {
 	let currentProjectIndex = findProjectIndexById(projectData.id);
 
 	const setNewTask = (data) => {
-		const { task, _ } = data;
-		persistTask(task.name, task.date, task.status, projects[currentProjectIndex].id);
+		const { task, project } = data;
+		const projectIndex = projects.findIndex(p => p.name === project.name);
+		const projectId = projects[projectIndex].id;
+		const taskId = Math.random()
+		setTasks(prev => [...prev, { name: task.name, date: task.date, id: taskId, status: task.status }])
+		setProjects(prevProjects => prevProjects.map(p => 
+			p.id === projectId ? { ...p, tasks: [...p.tasks, taskId]} : p))
 	}
 
 	const getTasksComponentArray = (tasksArray) => {
@@ -120,34 +128,34 @@ export const ViewProject = () => {
 	useEffect(() => {
 		const arr = getTasksByProjectIndex(currentProjectIndex);
 		console.log(arr);
-		setTasks(getTasksComponentArray(arr));
+		setTasksComponents(getTasksComponentArray(arr));
 	}, [projects, tasks]);
 
 	const renderAllTasks = () => {
 		const arr = getTasksByProjectIndex(currentProjectIndex);
 		console.log(arr);
-		setTasks(getTasksComponentArray(arr));
+		setTasksComponents(getTasksComponentArray(arr));
 		setSelected("all");
 	}
 
 	const renderOpenTasks = () => {
 		const arr = getTasksByProjectIndex(currentProjectIndex)
 			.filter(t => t.status === 0 || t.status === 1);
-		setTasks(getTasksComponentArray(arr));
+		setTasksComponents(getTasksComponentArray(arr));
 		setSelected("open");
 	}
 
 	const renderFinishedTasks = () => {
 		const arr = getTasksByProjectIndex(currentProjectIndex)
 			.filter(t => t.status === 2);
-		setTasks(getTasksComponentArray(arr));
+		setTasksComponents(getTasksComponentArray(arr));
 		setSelected("done");
 	}
 
 	const renderArchivedTasks = () => {
 		const arr = getTasksByProjectIndex(currentProjectIndex)
 			.filter(t => t.status === 3);
-		setTasks(getTasksComponentArray(arr));
+		setTasksComponents(getTasksComponentArray(arr));
 		setSelected("archived");
 	}
 	

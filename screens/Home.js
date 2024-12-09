@@ -1,6 +1,6 @@
 import {
-  TouchableWithoutFeedback, SafeAreaView, StyleSheet,
-  View, Text, TextInput, Image, Platform, Keyboard, TouchableOpacity, ScrollView
+  SafeAreaView, StyleSheet,
+  View, Text, TextInput, Image, Platform, TouchableOpacity, ScrollView
 } from "react-native";
 
 import Icon from "react-native-vector-icons/Ionicons";
@@ -10,9 +10,12 @@ import { useNavigation } from "@react-navigation/native";
 
 import Carousel from "../components/Carousel";
 import { projects } from "../exampledata";
+import { useAppState } from "../AppStateContext";
 
 export const Home = () => {
   const navigation = useNavigation();
+  const { projects, tasks } = useAppState();
+
   return (
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.container}>

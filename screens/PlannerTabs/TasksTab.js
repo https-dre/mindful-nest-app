@@ -9,30 +9,33 @@ import React, { useState, useEffect, useRef } from "react";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { TaskComponent } from "../../components/TaskComponent";
 import { formatDate, GetStringFormatedDate } from "../../utilities";
-import  { projects as initialProjects, tasks as initialTasks, persistTask } from "../../exampledata";
 import { BoxCreateTask } from "../../components/BoxCreateTask";
+import { useAppState } from "../../AppStateContext";
 
 export const TasksTab = () => {
 	const currentDateString = GetStringFormatedDate(new Date());
-	const [tasks, setTasks] = useState([]);
+	const [taskState, setTasksState] = useState([]);
 	const [selected, setSelected] = useState("all");
-	const [visible, setVisible] = useState(false)
-	const [lastRender, setLastRender] = useState(null)
-	const [projects, setProjects] = useState(initialProjects)
+	const [visible, setVisible] = useState(false);
+	const [lastRender, setLastRender] = useState(null);
+	const { projects, tasks, setTasks, setProjects } = useAppState();
 
 	const setNewTask = (data) => {
 		const { task, project } = data;
-		const projectIndex = initialProjects.findIndex(p => p.name === project.name);
-		console.log("SET NEW TASK: ", data)
-		persistTask(task.name, task.date, task.status, initialProjects[projectIndex].id);
+		const projectIndex = projects.findIndex(p => p.name === project.name);
+		const projectId = projects[projectIndex].id;
+		const taskId = Math.random()
+		setTasks(prev => [...prev, { name: task.name, date: task.date, id: taskId, status: task.status }])
+		setProjects(prevProjects => prevProjects.map(p => 
+			p.id === projectId ? { ...p, tasks: [...p.tasks, taskId]} : p))
 	}
 
 	const renderAllTasks = () => {
 		const today = new Date().getDate();
-		const render = initialProjects.flatMap((project) => {
+		const render = projects.flatMap((project) => {
 			console.log("PROJECT: ", project)
 			const tasks_array = project.tasks.map(t_id => {
-				return initialTasks.find(t => t.id === t_id)
+				return tasks.find(t => t.id === t_id)
 			})
 
 			return tasks_array
@@ -53,17 +56,17 @@ export const TasksTab = () => {
 			});
 		});
 	
-		setTasks(render); 
+		setTasksState(render); 
 		setSelected("all"); 
 		setLastRender(() => renderAllTasks); 
 	};
 
 	const renderOpenTasks = () => {
 		const today = new Date().getDate();
-		const render = initialProjects.flatMap((project) => {
+		const render = projects.flatMap((project) => {
 			console.log("PROJECT: ", project)
 			const tasks_array = project.tasks.map(t_id => {
-				return initialTasks.find(t => t.id === t_id)
+				return tasks.find(t => t.id === t_id)
 			})
 
 			return tasks_array
@@ -86,19 +89,17 @@ export const TasksTab = () => {
 			});
 		});
 	
-		setTasks(render); 
+		setTasksState(render); 
 		setSelected("open"); 
 		setLastRender(() => renderOpenTasks); 
 	}
 
-	
-
 	const renderFinishedTasks = () => {
 		const today = new Date().getDate();
-		const render = initialProjects.flatMap((project) => {
+		const render = projects.flatMap((project) => {
 			console.log("PROJECT: ", project)
 			const tasks_array = project.tasks.map(t_id => {
-				return initialTasks.find(t => t.id === t_id)
+				return tasks.find(t => t.id === t_id)
 			})
 
 			return tasks_array
@@ -119,17 +120,17 @@ export const TasksTab = () => {
 			});
 		});
 	
-		setTasks(render); 
+		setTasksState(render); 
 		setSelected("done"); 
 		setLastRender(() => renderFinishedTasks); 
 	}
 
 	const renderArchivedTasks = () => {
 		const today = new Date().getDate();
-		const render = initialProjects.flatMap((project) => {
+		const render = projects.flatMap((project) => {
 			console.log("PROJECT: ", project)
 			const tasks_array = project.tasks.map(t_id => {
-				return initialTasks.find(t => t.id === t_id)
+				return tasks.find(t => t.id === t_id)
 			})
 
 			return tasks_array
@@ -150,7 +151,7 @@ export const TasksTab = () => {
 			});
 		});
 	
-		setTasks(render); 
+		setTasksState(render); 
 		setSelected("archived"); 
 		setLastRender(() => renderAllTasks); 
 	}
@@ -159,7 +160,7 @@ export const TasksTab = () => {
 		renderAllTasks();
 		setSelected("all");
 		setLastRender(() => renderAllTasks)
-	}, [initialProjects, initialTasks])
+	}, [projects, tasks])
 
 	return (
 		<View style={styles.container}>
@@ -219,7 +220,7 @@ export const TasksTab = () => {
 				</TouchableOpacity>
 			</View>
 
-			<ScrollView style={{ marginTop: 5, width: "100%" }}>{tasks}</ScrollView>
+			<ScrollView style={{ marginTop: 5, width: "100%" }}>{taskState}</ScrollView>
 		</View>
 	);
 };
