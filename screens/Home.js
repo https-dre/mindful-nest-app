@@ -16,15 +16,9 @@ export const Home = () => {
   const [ projectsToCarousel, setProjectsToCarousel ] = useState(projects);
 
   useEffect(() => {
-    setProjectsToCarousel([]);
-    projects.forEach(p => {
-      if (parseFloat(p.progress) != 100.00) {
-        setProjectsToCarousel(prev => [...prev, p])
-      }
-    })
+    const filteredProjects = projects.filter(p => parseFloat(p.progress) !== 100.00);
+    setProjectsToCarousel(filteredProjects);
   }, [projects]);
-
-  console.log(projectsToCarousel);
 
   return (
       <SafeAreaView style={styles.container}>
@@ -65,7 +59,7 @@ export const Home = () => {
           <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 20 }}>
             <View>
               <Text style={{ fontFamily: "SpaceGroteskMedium", fontSize: 18 }}>Projetos</Text>
-              <Text>Você tem {projects.length} projetos em Progresso!</Text>
+              <Text>Você tem {projectsToCarousel.length} {projectsToCarousel.length === 1 ? 'projeto' : 'projetos'} em Progresso!</Text>
             </View>
             
             <TouchableOpacity style={styles.blueButtom}>

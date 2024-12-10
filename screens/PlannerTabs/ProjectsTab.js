@@ -10,14 +10,26 @@ import Carousel from "../../components/Carousel";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { SquareProject } from "../../components/SquareProject";
 import { useAppState } from "../../AppStateContext";
+import { useState, useEffect } from "react";
 
 export const ProjectsTab = () => {
-	let projectComponents = [];
 	const { projects } = useAppState();
 
-	projects.map(p => {
-		projectComponents.push(<SquareProject data={p} key={Math.random()} size={170} />)
+	const projectComponents = projects.map(p => {
+		return <SquareProject data={p} key={p.id} size={170} />
 	})
+
+	const [ projectsToCarousel, setProjectsToCarousel ] = useState(projects);
+
+	useEffect(() => {
+		const filteredProjects = projects.filter(p => parseFloat(p.progress) !== 100.00);
+		setProjectsToCarousel(prevState => {
+		  if (JSON.stringify(prevState) !== JSON.stringify(filteredProjects)) {
+			return filteredProjects;
+		  }
+		  return prevState; 
+		});
+	}, [projects]);
 
 	return (
 		<View style={styles.container}>
@@ -30,7 +42,7 @@ export const ProjectsTab = () => {
 			>
 				Em Progresso
 			</Text>
-			<Carousel data={projects} w={170} h={170}/>
+			<Carousel data={projectsToCarousel}/>
 
 			<ScrollView style={{paddingHorizontal: 20, marginTop: 10}}>
                 {/* Botão De Criar Projeto */}
