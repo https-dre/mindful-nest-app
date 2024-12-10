@@ -9,10 +9,13 @@ import { useNavigation } from "@react-navigation/native";
 import Carousel from "../components/Carousel";
 import { useAppState } from "../AppStateContext";
 import { useEffect, useState } from "react";
+import { ModalCreateProject } from "../components/ModalCreateProject";
+import { formatPadDate } from "../utilities";
 
 export const Home = () => {
   const navigation = useNavigation();
-  const { projects } = useAppState();
+  const [modalVisible, setModalVisible] = useState(true);
+  const { projects, setProjects } = useAppState();
   const [ projectsToCarousel, setProjectsToCarousel ] = useState(projects);
 
   useEffect(() => {
@@ -20,8 +23,23 @@ export const Home = () => {
     setProjectsToCarousel(filteredProjects);
   }, [projects]);
 
+  const setNewProject = (projectData) => {
+    console.log(projectData);
+    const id = Math.random();
+    setProjects(prev => [...prev, {
+      name: projectData.name,
+      progress: 0,
+      deadline: formatPadDate(projectData.date),
+      users: ["andre_dias"],
+      backColor: projectData.backColor,
+      id: id,
+      tasks: []
+    }])
+  }
+
   return (
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+        <ModalCreateProject onClose={() => setModalVisible(false)} projectHold={setNewProject} extVisible={modalVisible}/>
         <ScrollView style={styles.container}>
         { /* header */}
         <View style={styles.header}>
@@ -62,7 +80,7 @@ export const Home = () => {
               <Text>Você tem {projectsToCarousel.length} {projectsToCarousel.length === 1 ? 'projeto' : 'projetos'} em Progresso!</Text>
             </View>
             
-            <TouchableOpacity style={styles.blueButtom}>
+            <TouchableOpacity style={styles.blueButtom} onPress={() => setModalVisible(true)}>
               <Icon name="add" size={20} color="#007AFF" />
               <Text style={{ color: "#007AFF" }}>Criar</Text>
             </TouchableOpacity>
