@@ -39,7 +39,7 @@ export function BottomTabRouter() {
             }
 
             // Retorna o ícone com a cor amarela se a aba estiver ativa
-            return <Icon name={iconName} color={focused ? '#007AFF' : color} size={size} style={{paddingVertical: 100}} />;
+            return <Icon name={iconName} color={focused ? '#007AFF' : color} size={size} />;
         },
         tabBarActiveTintColor: '#007AFF', // Cor do ícone quando ativo
         tabBarInactiveTintColor: '#676D75', // Cor do ícone quando inativo
@@ -65,7 +65,7 @@ export function BottomTabRouter() {
 const styles = StyleSheet.create({
     barStyle: {
         backgroundColor: "#F8F8F8",
-        borderTopWidth: 0,
-        height: 60
+        height: 70 ,
+        borderTopWidth: 0
     }
 });
