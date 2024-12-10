@@ -14,10 +14,9 @@ import { useAppState } from "../../AppStateContext";
 
 export const TasksTab = () => {
 	const currentDateString = GetStringFormatedDate(new Date());
-	const [taskState, setTasksState] = useState([]);
+	const [taskComponents, setTaskComponents] = useState([]);
 	const [selected, setSelected] = useState("all");
 	const [visible, setVisible] = useState(false);
-	const [lastRender, setLastRender] = useState(null);
 	const { projects, tasks, setTasks, setProjects } = useAppState();
 
 	const setNewTask = (data) => {
@@ -33,7 +32,6 @@ export const TasksTab = () => {
 	const renderAllTasks = () => {
 		const today = new Date().getDate();
 		const render = projects.flatMap((project) => {
-			console.log("PROJECT: ", project)
 			const tasks_array = project.tasks.map(t_id => {
 				return tasks.find(t => t.id === t_id)
 			})
@@ -56,15 +54,14 @@ export const TasksTab = () => {
 			});
 		});
 	
-		setTasksState(render); 
+		setTaskComponents(render); 
 		setSelected("all"); 
-		setLastRender(() => renderAllTasks); 
 	};
 
 	const renderOpenTasks = () => {
 		const today = new Date().getDate();
 		const render = projects.flatMap((project) => {
-			console.log("PROJECT: ", project)
+			
 			const tasks_array = project.tasks.map(t_id => {
 				return tasks.find(t => t.id === t_id)
 			})
@@ -89,15 +86,14 @@ export const TasksTab = () => {
 			});
 		});
 	
-		setTasksState(render); 
+		setTaskComponents(render); 
 		setSelected("open"); 
-		setLastRender(() => renderOpenTasks); 
 	}
 
 	const renderFinishedTasks = () => {
 		const today = new Date().getDate();
 		const render = projects.flatMap((project) => {
-			console.log("PROJECT: ", project)
+			
 			const tasks_array = project.tasks.map(t_id => {
 				return tasks.find(t => t.id === t_id)
 			})
@@ -120,15 +116,14 @@ export const TasksTab = () => {
 			});
 		});
 	
-		setTasksState(render); 
-		setSelected("done"); 
-		setLastRender(() => renderFinishedTasks); 
+		setTaskComponents(render); 
+		setSelected("done");  
 	}
 
 	const renderArchivedTasks = () => {
 		const today = new Date().getDate();
 		const render = projects.flatMap((project) => {
-			console.log("PROJECT: ", project)
+			
 			const tasks_array = project.tasks.map(t_id => {
 				return tasks.find(t => t.id === t_id)
 			})
@@ -151,16 +146,29 @@ export const TasksTab = () => {
 			});
 		});
 	
-		setTasksState(render); 
+		setTaskComponents(render); 
 		setSelected("archived"); 
-		setLastRender(() => renderAllTasks); 
 	}
 
 	useEffect(() => {
-		renderAllTasks();
-		setSelected("all");
-		setLastRender(() => renderAllTasks)
-	}, [projects, tasks])
+		switch (selected) {
+		  case "all":
+			renderAllTasks();
+			break;
+		  case "open":
+			renderOpenTasks();
+			break;
+		  case "done":
+			renderFinishedTasks();
+			break;
+		  case "archived":
+			renderArchivedTasks();
+			break;
+		  default:
+			renderAllTasks();
+			break;
+		}
+	  }, [selected, tasks, projects]);
 
 	return (
 		<View style={styles.container}>
@@ -220,7 +228,7 @@ export const TasksTab = () => {
 				</TouchableOpacity>
 			</View>
 
-			<ScrollView style={{ marginTop: 5, width: "100%" }}>{taskState}</ScrollView>
+			<ScrollView style={{ marginTop: 5, width: "100%" }}>{taskComponents}</ScrollView>
 		</View>
 	);
 };

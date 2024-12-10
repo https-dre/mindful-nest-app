@@ -103,12 +103,6 @@ export const ViewProject = () => {
 		});
 	}
 
-	useEffect(() => {
-		const arr = getTasksByProjectIndex(currentProjectIndex);
-		console.log(arr);
-		setTasksComponents(getTasksComponentArray(arr));
-	}, [projects, tasks]);
-
 	const renderAllTasks = () => {
 		const arr = getTasksByProjectIndex(currentProjectIndex);
 		console.log(arr);
@@ -135,6 +129,38 @@ export const ViewProject = () => {
 			.filter(t => t.status === 3);
 		setTasksComponents(getTasksComponentArray(arr));
 		setSelected("archived");
+	}
+
+	useEffect(() => {
+		switch (selected) {
+		  case "all":
+			renderAllTasks();
+			break;
+		  case "open":
+			renderOpenTasks();
+			break;
+		  case "done":
+			renderFinishedTasks();
+			break;
+		  case "archived":
+			renderArchivedTasks();
+			break;
+		  default:
+			renderAllTasks();
+			break;
+		}
+	}, [selected, tasks, projects]);
+	
+	useEffect(() => {
+		const tasksFromCurrentProject = getTasksByProjectIndex(currentProjectIndex);
+		let finishedTasksCount = 0;
+		tasksFromCurrentProject.forEach(t => t.status >= 2 ? finishedTasksCount += 1 : 0);
+		const projectProgress = (finishedTasksCount / tasksFromCurrentProject.length) * 100
+		setProjects(prev => prev.map(p => p.id === projectData.id ? { ...p, progress: projectProgress } : p));
+	}, [tasks]);
+
+	const formatedProgress = () => {
+		return `${parseInt(projects[currentProjectIndex].progress)}%`
 	}
 	
 	return (
@@ -196,7 +222,7 @@ export const ViewProject = () => {
 							}}
 						>
 							<Text style={{ color: "#EBEBEB" }}>Progresso</Text>
-							<Text style={{ color: "#EBEBEB" }}>{progress}</Text>
+							<Text style={{ color: "#EBEBEB" }}>{formatedProgress()}</Text>
 						</View>
 
 						<View
@@ -212,7 +238,7 @@ export const ViewProject = () => {
 							<View
 								style={{
 									height: 1,
-									width: progress,
+									width: formatedProgress(),
 									backgroundColor: "white",
 									opacity: 1,
 								}}
