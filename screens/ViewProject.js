@@ -13,7 +13,6 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import { GetStringFormatedDate, formatDate } from "../utilities";
 import { TaskComponent } from "../components/TaskComponent";
 import { BoxCreateTask } from "../components/BoxCreateTask";
-import { projects, tasks, persistTask } from "../exampledata";
 import { useAppState } from "../AppStateContext";
 
 const usersData = [
@@ -70,28 +69,7 @@ export const ViewProject = () => {
 	const [taskComponents, setTasksComponents] = useState([]);
 	const [selected, setSelected] = useState("all");
 
-	
-	const findTaskIndexById = (taskId) => {
-		let i = null;
-		for (const index in tasks) {
-			if (taskId === tasks[index].id) {
-				i = index;
-			}
-		}
-		return i;
-	}
-
-	const findProjectIndexById = (projectId) => {
-		let i = null;
-		for (const index in projects) {
-			if (projectId === projects[index].id) {
-				i = index;
-			}
-		}
-		return i;
-	}
-
-	let currentProjectIndex = findProjectIndexById(projectData.id);
+	let currentProjectIndex = projects.findIndex(p => p.id === projectData.id);
 
 	const setNewTask = (data) => {
 		const { task, project } = data;
@@ -121,7 +99,7 @@ export const ViewProject = () => {
 
 	const getTasksByProjectIndex = (p_index) => {
 		return projects[p_index].tasks.map(id => {
-			return tasks[findTaskIndexById(id)];
+			return tasks[tasks.findIndex(t => t.id === id)];
 		});
 	}
 
