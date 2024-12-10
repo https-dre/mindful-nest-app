@@ -1,19 +1,17 @@
 {
   "expo": {
     "name": "mindful-nest-app",
-    "displayName": "Mindful nest",
     "slug": "snack-bdd0d183-c44e-4951-89be-66256f51e13b",
-    "entryPoint": "./index.js",
     "assetBundlePatterns": [
       "**/*"
     ],
     "newArchEnabled": true,
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/mindful-nest-icon.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/mindful-nest-icon.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -28,7 +26,7 @@
       "package": "com.mindful_nest.demo2024"
     },
     "web": {
-      "favicon": "./assets/splash.png"
+      "favicon": "./assets/mindful-nest-icon.jpg"
     },
     "extra": {
       "eas": {
