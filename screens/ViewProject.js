@@ -152,12 +152,17 @@ export const ViewProject = () => {
 	}, [selected, tasks, projects]);
 	
 	useEffect(() => {
+		let projectProgress = 0;
 		const tasksFromCurrentProject = getTasksByProjectIndex(currentProjectIndex);
+		if (tasksFromCurrentProject.length === 0) {
+		  setProjects(prev => prev.map(p => p.id === projectData.id ? { ...p, progress: 0 } : p));
+		  return;
+		}
 		let finishedTasksCount = 0;
 		tasksFromCurrentProject.forEach(t => t.status >= 2 ? finishedTasksCount += 1 : 0);
-		const projectProgress = (finishedTasksCount / tasksFromCurrentProject.length) * 100
+		projectProgress = (finishedTasksCount / tasksFromCurrentProject.length) * 100
 		setProjects(prev => prev.map(p => p.id === projectData.id ? { ...p, progress: projectProgress } : p));
-	}, [tasks]);
+	  }, [tasks]);
 
 	const formatedProgress = () => {
 		return `${parseInt(projects[currentProjectIndex].progress)}%`

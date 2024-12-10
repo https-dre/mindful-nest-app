@@ -39,7 +39,7 @@ export const Project = ({projectData, w = 250, h = 170 }) => {
     let projectProgress = 0;
     const tasksFromCurrentProject = getTasksByProjectIndex(currentProjectIndex);
     if (tasksFromCurrentProject.length === 0) {
-      setProjects(prev => prev.map(p => p.id === projectData.id ? { ...p, progress: projectProgress } : p));
+      setProjects(prev => prev.map(p => p.id === projectData.id ? { ...p, progress: 0 } : p));
       return;
     }
     let finishedTasksCount = 0;
