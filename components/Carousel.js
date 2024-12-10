@@ -24,15 +24,14 @@ const MyCarousel = ({data}) => {
                 ref={flatListRef} // Defina a referência para o FlatList
                 data={data}
                 renderItem={({ item }) => {
-                    if (item.progress !== '100%') {
-                        return (
-                            <View style={styles.slide}>
-                                <Project
-                                    projectData={item}
-                                />
-                            </View>
-                        );
-                    }
+                    return (
+                        <View style={styles.slide}>
+                            <Project
+                                projectData={item}
+                            />
+                        </View>
+                     );
+        
                 }}
                 horizontal
                 pagingEnabled

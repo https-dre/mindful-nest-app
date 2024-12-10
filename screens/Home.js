@@ -5,16 +5,26 @@ import {
 
 import Icon from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-
 import { useNavigation } from "@react-navigation/native";
-
 import Carousel from "../components/Carousel";
-import { projects } from "../exampledata";
 import { useAppState } from "../AppStateContext";
+import { useEffect, useState } from "react";
 
 export const Home = () => {
   const navigation = useNavigation();
-  const { projects, tasks } = useAppState();
+  const { projects } = useAppState();
+  const [ projectsToCarousel, setProjectsToCarousel ] = useState(projects);
+
+  useEffect(() => {
+    setProjectsToCarousel([]);
+    projects.forEach(p => {
+      if (parseFloat(p.progress) != 100.00) {
+        setProjectsToCarousel(prev => [...prev, p])
+      }
+    })
+  }, [projects]);
+
+  console.log(projectsToCarousel);
 
   return (
       <SafeAreaView style={styles.container}>
@@ -66,7 +76,7 @@ export const Home = () => {
         </View>
 
         { /* Carousel */}
-        <Carousel data={projects} />
+        <Carousel data={projectsToCarousel} />
         <Text style={{fontSize: 20, marginLeft:"5%",}}>Recomendações</Text>
         <Text style={{fontSize: 14, marginLeft:"5%", marginBottom:"5%", color: "#88929E"}}>As melhores recomendações para melhorar o seu dia</Text>
         <View style={[styles.recomend,{ flexDirection: "row"}]}>
