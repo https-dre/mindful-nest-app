@@ -4,7 +4,9 @@
     "displayName": "Mindful nest",
     "slug": "snack-bdd0d183-c44e-4951-89be-66256f51e13b",
     "entryPoint": "./index.js",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "newArchEnabled": true,
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,16 +18,22 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.mindful_nest.demo2024"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/splash.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b9fdb265-3499-4d08-9b8e-6263edeee977"
+      }
     }
   }
 }
