@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "mindful-nest-app",
-    "slug": "snack-bdd0d183-c44e-4951-89be-66256f51e13b",
+    "slug": "mindful-nest-expo-slug",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -30,7 +30,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "b9fdb265-3499-4d08-9b8e-6263edeee977"
+        "projectId": "012f3034-3e76-408e-ab7f-0b1e06f62609"
       }
     }
   }
