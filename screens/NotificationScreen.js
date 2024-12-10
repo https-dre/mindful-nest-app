@@ -7,7 +7,7 @@ export const NotificationScreen = () => {
   return (
     <SafeAreaView style={styles.tela}>
       <TouchableOpacity style={styles.outbtn} onPress={() => navigation.goBack()  }>
-        <Icon name="back" size={24} color="black" />
+        <Icon name="chevron-back" size={24} color="black" />
         <Text>  Notificações</Text>
       </TouchableOpacity>
       <View style={styles.item}>
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "95%",
     alignSelf: "center",
+    alignItems: "center"
   },
   item: {
     marginTop: "2%",
@@ -51,8 +52,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   title: {
-    fontWeight: "bold",
-
+    fontWeight: "bold"
   },
   line: {
     marginBottom: "2%",

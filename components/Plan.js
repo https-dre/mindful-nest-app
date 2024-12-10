@@ -1,10 +1,10 @@
 import { View, StyleSheet, Text, TouchableOpacity, SectionList, } from "react-native";
+import Icon from "react-native-vector-icons/Entypo";
+import BasicLoginStyle from "../screens/Login/BasicLoginStyles";
+import { useNavigation } from "@react-navigation/native";
 
-import Icon from "react-native-vector-icons/Entypo"
-
-import BasicLoginStyle from "../screens/Login/BasicLoginStyles"
-
-export const Plan = ({name, price = "15,00", hasMessage = true, data, repeat, desconto=20}) => {
+export const Plan = ({ name, price = "15,00", hasMessage = true, data, repeat, desconto = 20 }) => {
+  const navigation = useNavigation();
   let finalMessage = null
 
   if (hasMessage != false) {
@@ -37,7 +37,7 @@ export const Plan = ({name, price = "15,00", hasMessage = true, data, repeat, de
         />
       </View>
 
-      <TouchableOpacity style={[BasicLoginStyle.buttonDefaultStyle, {marginTop: 20}]}>
+      <TouchableOpacity style={[BasicLoginStyle.buttonDefaultStyle, {marginTop: 20}]} onPress={() => navigation.navigate("BottomTab")}>
         <Text style={{fontWeight: "bold", color: "white"}}>Escolher e Continuar</Text>
       </TouchableOpacity>
 

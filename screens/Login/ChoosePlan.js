@@ -24,7 +24,7 @@ export const ChoosePlan = () => {
       <Text style={[BasicLoginStyle.titleSpaceGrotesk, {margin: 20, maxWidth: 250, fontSize: 40}]}>Escolha um Plano</Text>
 
       <ScrollView style={{alignSelf: "center"}}>
-        <Plan data={data} price={15.00} name="Premium" repeat="Mensal" desconto={20} />
+        <Plan data={data} price={25.00} name="Premium" repeat="Mensal" desconto={20} />
         <Plan data={freePlanData} price={0} name="Gratuito" hasMessage={false}/>
       </ScrollView>
 

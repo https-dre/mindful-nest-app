@@ -32,7 +32,7 @@ const App = () => {
     <AppStateProvider>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <NavigationContainer style={{flex: 1}}>
-          <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="BottomTab">
+          <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="LoginOrRegister">
             <Stack.Screen name="LoginOrRegister" component={LoginOrRegister} />
             <Stack.Screen name="CreateAccount" component={CreateAccount} />
             <Stack.Screen name="Security" component={Security} />
