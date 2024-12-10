@@ -10,9 +10,9 @@ import {
     Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { projects } from "../exampledata";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { HorizontalSelector } from "./HorizontalSelector";
+import { useAppState } from "../AppStateContext";
 
 export const BoxCreateTask = ({
     extVisible,
@@ -20,6 +20,7 @@ export const BoxCreateTask = ({
     style,
     taskHold,
 }) => {
+    const { projects } = useAppState();
     const [visible, setVisible] = useState(extVisible);
     const [selectedProject, setSelectedProject] = useState(null);
     const [date, setDate] = useState(new Date());
