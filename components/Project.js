@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
-import { projects } from "../exampledata";
+import { useAppState } from "../AppStateContext";
 
 const usersData = [
   {
@@ -10,9 +11,17 @@ const usersData = [
   }
 ]
 
-export const Project = ({projectData = projects[0], w = 250, h = 170 }) => {
+export const Project = ({projectData, w = 250, h = 170 }) => {
   let participantesImage = []
+  const { projects, tasks, setProjects } = useAppState();
   const navigation = useNavigation();
+  const currentProjectIndex = projects.findIndex(p => p.id === projectData.id);
+
+  const getTasksByProjectIndex = (p_index) => {
+    return projects[p_index].tasks.map(id => {
+      return tasks[tasks.findIndex(t => t.id === id)];
+    });
+  }
 
   for(const index in projectData.users) {
     usersData.map(user => {
@@ -25,6 +34,16 @@ export const Project = ({projectData = projects[0], w = 250, h = 170 }) => {
   function handleNavigation() {
     navigation.navigate("ViewProject", {projectData})
   }
+
+  useEffect(() => {
+    const tasksFromCurrentProject = getTasksByProjectIndex(currentProjectIndex);
+    let finishedTasksCount = 0;
+    tasksFromCurrentProject.forEach(t => t.status >= 2 ? finishedTasksCount += 1 : 0);
+    const projectProgress = (finishedTasksCount / tasksFromCurrentProject.length) * 100
+    const progressFormated = `${projectProgress}%`
+    setProjects(prev => prev.map(p => p.id === projectData.id ? { ...p, progress: projectProgress } : p));
+    console.log(progressFormated);
+  }, [tasks]);
   
   return (
     <View style={[styles.container, {backgroundColor: projectData.backColor, width: w, height: h}]}>
@@ -41,12 +60,12 @@ export const Project = ({projectData = projects[0], w = 250, h = 170 }) => {
       <View style={{alignSelf: "center", width: "100%"}}>
         <View style={{flexDirection: "row", justifyContent: "space-between", marginBottom: 5}}>
           <Text style={{color: "#EBEBEB"}}>Progresso</Text>
-          <Text style={{color: "#EBEBEB"}}>{projectData.progress}</Text>
+          <Text style={{color: "#EBEBEB"}}>{`${projects[currentProjectIndex].progress}%`}</Text>
         </View>
 
         { /* Barra de Progresso */ }
         <View style={{opacity: 0.21 ,backgroundColor: "black", alignSelf: "center", height: 1, width: "100%"}}>
-          <View style={{height: 1, width: projectData.progress, backgroundColor: "white", opacity: 1}}/>
+          <View style={{height: 1, width: `${projects[currentProjectIndex].progress}%`, backgroundColor: "white", opacity: 1}}/>
         </View>
       </View>
       
