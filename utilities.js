@@ -19,11 +19,12 @@ export const GetStringFormatedDate = (date) => {
 		"Julho",
 		"Agosto",
 		"Setembro",
+		"Outubro",
 		"Novembro",
 		"Dezembro",
 	];
 
-	return `${diasSemana[date.getDay()]}, ${date.getDate()} de ${meses[date.getMonth() - 1]}`;
+	return `${diasSemana[date.getDay()]}, ${date.getDate()} de ${meses[date.getMonth()]}`;
 };
 
 export function formatDate(date) {
