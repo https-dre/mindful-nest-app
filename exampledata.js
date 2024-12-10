@@ -1,7 +1,7 @@
 export let projects = [
     {
         name: "Simple App Design",
-        progress: "57%",
+        progress: 57,
         deadline: "01/12",
         users: ["andre_dias"],
         backColor: "#3D7DE5",
@@ -10,7 +10,7 @@ export let projects = [
     },
     {
         name: "Crypto Wallet",
-        progress: "38%",
+        progress: 38,
         deadline: "01/12",
         users: ["andre_dias"],
         backColor: "#22272F",
@@ -19,7 +19,7 @@ export let projects = [
     },
     {
         name: "Square Kernel",
-        progress: "27%",
+        progress: 27,
         deadline: "No Data",
         users: ["andre_dias"],
         backColor: "#4FAE5B",
@@ -28,10 +28,10 @@ export let projects = [
     },
     {
         name: "App De Pam",
-        progress: "47%",
+        progress: 47,
         deadline: "03/12",
         users: ["andre_dias", "vitor_forcassin"],
-        backColor: "#3D7DE5",
+        backColor: "#59c9e2",
         id: Math.random(),
         tasks: []
     }
