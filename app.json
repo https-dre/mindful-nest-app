@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/mindful-nest-logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.mindful_nest.demo2024"
+      "package": "com.mindful_nest.demo2024",
+      "enablePngCrunchInReleaseBuilds": false
     },
     "web": {
       "favicon": "./assets/mindful-nest-icon.png"
