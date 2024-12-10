@@ -42,7 +42,6 @@ export const Project = ({projectData, w = 250, h = 170 }) => {
     const projectProgress = (finishedTasksCount / tasksFromCurrentProject.length) * 100
     const progressFormated = `${projectProgress}%`
     setProjects(prev => prev.map(p => p.id === projectData.id ? { ...p, progress: projectProgress } : p));
-    console.log(progressFormated);
   }, [tasks]);
   
   return (
