@@ -2,35 +2,28 @@ import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import IconFeather from "react-native-vector-icons/Feather";
 import { useState } from "react";
-import { tasks } from "../exampledata";
+import { useAppState } from "../AppStateContext";
 
-const changeStatus = (taskId, setStatus) => {
-	let taskIndex = null;
-	for (const index in tasks) {
-		if (taskId === tasks[index].id) 
-		{
-			taskIndex = index;
-			break;
-		}
-	}
-	const { status } = tasks[taskIndex];
-	if (status === 3) {
-		tasks[taskIndex].status = 0;
-		setStatus(0)
-	} else {
-		tasks[taskIndex].status += 1;
-		setStatus(status + 1);
-	}
-	console.log(tasks[taskIndex]);
+const changeStatus = (taskId, setStatus, setTasks) => {
+	setTasks((prevTasks) =>
+        prevTasks.map((task) => {
+            if (task.id === taskId) {
+                const updatedStatus = (task.status + 1) % 4;
+                setStatus(updatedStatus);
+                return { ...task, status: updatedStatus };
+            }
+            return task;
+        })
+    );
 }
 
-function handleMarker(status, setStatus, taskId) {
+function handleMarker(status, setStatus, taskId, setTasks) {
 	switch (status) {
         case 0:
             return (
 				<TouchableOpacity
 					onPress={()=>{
-						changeStatus(taskId, setStatus)
+						changeStatus(taskId, setStatus, setTasks)
 					}}
 				>
 					<View
@@ -52,7 +45,7 @@ function handleMarker(status, setStatus, taskId) {
 			return (
 				<TouchableOpacity
 					onPress={()=>{
-						changeStatus(taskId, setStatus)
+						changeStatus(taskId, setStatus, setTasks)
 					}}
 				>
 					<View
@@ -79,7 +72,7 @@ function handleMarker(status, setStatus, taskId) {
 			return (
 				<TouchableOpacity
 					onPress={()=>{
-						changeStatus(taskId, setStatus)
+						changeStatus(taskId, setStatus, setTasks)
 					}}
 				>
 					<Icon
@@ -94,7 +87,7 @@ function handleMarker(status, setStatus, taskId) {
 			return (
 				<TouchableOpacity
 					onPress={()=>{
-						changeStatus(taskId, setStatus)
+						changeStatus(taskId, setStatus, setTasks)
 					}}
 				>
 					<View
@@ -131,7 +124,8 @@ export const TaskComponent = ({
 	id = 0
 }) => {
 	const [varStatus, setVarStatus] = useState(status)
-	let marker = handleMarker(varStatus, setVarStatus, id);
+	const { tasks, setTasks } = useAppState();
+	let marker = handleMarker(varStatus, setVarStatus, id, setTasks);
 
 	return (
 		<View style={styles.container}>
