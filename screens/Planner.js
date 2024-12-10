@@ -78,7 +78,8 @@ const styles = StyleSheet.create({
     navMenu: {
         justifyContent: "center",
         flexDirection: "row",
-        backgroundColor: "transparent"
+        backgroundColor: "transparent",
+        marginTop: 30
     },
     selected: {
         flexDirection: "row",
