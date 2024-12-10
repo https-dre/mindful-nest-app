@@ -3,17 +3,33 @@ import {
 	Text,
 	TouchableOpacity,
 	StyleSheet,
-	ScrollView,
-    Dimensions
+	ScrollView
 } from "react-native";
 import Carousel from "../../components/Carousel";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { SquareProject } from "../../components/SquareProject";
 import { useAppState } from "../../AppStateContext";
 import { useState, useEffect } from "react";
+import { ModalCreateProject } from "../../components/ModalCreateProject";
+import { formatPadDate } from "../../utilities";
 
 export const ProjectsTab = () => {
-	const { projects } = useAppState();
+	const { projects, setProjects } = useAppState();
+	const [modalVisible, setModalVisible] = useState(false);
+
+	const setNewProject = (projectData) => {
+		console.log(projectData);
+		const id = Math.random();
+		setProjects(prev => [...prev, {
+		  name: projectData.name,
+		  progress: 0,
+		  deadline: formatPadDate(projectData.date),
+		  users: ["andre_dias"],
+		  backColor: projectData.backColor,
+		  id: id,
+		  tasks: []
+		}])
+	  }
 
 	const projectComponents = projects.map(p => {
 		return <SquareProject data={p} key={p.id} size={170} />
@@ -33,6 +49,7 @@ export const ProjectsTab = () => {
 
 	return (
 		<View style={styles.container}>
+			<ModalCreateProject onClose={() => setModalVisible(false)} projectHold={setNewProject} extVisible={modalVisible}/>
 			<Text
 				style={{
 					fontFamily: "SpaceGroteskMedium",
@@ -65,7 +82,7 @@ export const ProjectsTab = () => {
 						</Text>
 
 					</View>
-					<TouchableOpacity style={styles.addButton}>
+					<TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
 						<Icon name="plus" size={17} color="#007AFF" />
 						<Text style={{ color: "#007AFF" }}>Adicionar</Text>
 					</TouchableOpacity>

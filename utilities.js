@@ -19,11 +19,12 @@ export const GetStringFormatedDate = (date) => {
 		"Julho",
 		"Agosto",
 		"Setembro",
+		"Outubro",
 		"Novembro",
 		"Dezembro",
 	];
 
-	return `${diasSemana[date.getDay()]}, ${date.getDate()} de ${meses[date.getMonth() - 1]}`;
+	return `${diasSemana[date.getDay()]}, ${date.getDate()} de ${meses[date.getMonth()]}`;
 };
 
 export function formatDate(date) {
@@ -42,4 +43,12 @@ export function formatHours(date) {
 		hour: '2-digit',
 		minute: '2-digit',
 	});
+}
+
+export function formatPadDate(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Janeiro é 0
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
 }
