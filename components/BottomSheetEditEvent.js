@@ -58,10 +58,10 @@ export const BottomSheetEditEvent = ({ modalizeRef, calendarRef }) => {
     const close = () => {
         navigation.setOptions({
             tabBarStyle: {
-                display: 'flex',
-                backgroundColor: '#F8F8F8',
-                height: 70,
-                borderTopWidth: 0,
+                tabBarStyle: {
+                    display: 'flex',
+                    backgroundColor: "#F8F8F8"
+                },
             },
         });
 
