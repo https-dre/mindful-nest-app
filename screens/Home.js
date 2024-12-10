@@ -14,7 +14,7 @@ import { formatPadDate } from "../utilities";
 
 export const Home = () => {
   const navigation = useNavigation();
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
   const { projects, setProjects } = useAppState();
   const [ projectsToCarousel, setProjectsToCarousel ] = useState(projects);
 
